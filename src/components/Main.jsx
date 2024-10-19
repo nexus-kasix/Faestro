@@ -16,6 +16,13 @@ function Main() {
     setCommand(""); // Очистить инпут после выполнения команды
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      executeCommand();
+    }
+  };
+
+
   return (
     <div class="console-wrapper">
       <div id="console-logs">
@@ -29,9 +36,13 @@ function Main() {
           type="text"
           value={command()}
           onInput={(e) => setCommand(e.target.value)}
+          onKeyDown={handleKeyDown}
           placeholder="Enter command..."
         />
-        <button id="console-execute" onClick={executeCommand}>
+        <button 
+          id="console-execute" 
+          onClick={executeCommand} 
+        >
           Execute
         </button>
       </div>
@@ -44,8 +55,7 @@ function ConsoleLogEntry({ text }) {
 
   // После определенного времени заменить анимированный текст на обычный
   onMount(() => {
-    // Длительность анимации = (количество символов * задержка между ними) + длительность анимации одного символа
-    const totalAnimationTime = text.length * 50 + 500; // В миллисекундах
+    const totalAnimationTime = text.split(" ").length * 200 + 500; // В миллисекундах
     setTimeout(() => {
       setIsAnimated(false);
     }, totalAnimationTime);
@@ -54,12 +64,12 @@ function ConsoleLogEntry({ text }) {
   return (
     <div class="console-log-entry">
       <Show when={isAnimated()} fallback={<span>{text}</span>}>
-        {text.split("").map((char, index) => (
+        {text.split(" ").map((word, index) => (
           <span
             class="console-log-char"
-            style={{ "animation-delay": `${index * 0.05}s` }}
+            style={{ "animation-delay": `${index * 0.2}s`, display: "inline-block" }} // Добавлено для корректной работы пробелов
           >
-            {char === " " ? "\u00A0" : char}
+            {word}&nbsp; {/* Пробел между словами */}
           </span>
         ))}
       </Show>
