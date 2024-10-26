@@ -1,19 +1,38 @@
-import { createSignal, onMount, Show } from "solid-js";
+import { createSignal, onMount, Show, For } from "solid-js";
 import { commands } from "/src/commands/console.js";
 
 function Main() {
   const [logs, setLogs] = createSignal([]);
   const [command, setCommand] = createSignal("");
+  const [isClearing, setIsClearing] = createSignal(false);
 
-  const executeCommand = () => {
+  const executeCommand = async () => {
     const cmd = command().split(" ")[0];
     const args = command().split(" ").slice(1);
     let result = `Command not found: ${cmd}`;
+    
     if (commands[cmd]) {
-      result = commands[cmd](...args);
+      try {
+        result = await commands[cmd](...args);
+      } catch (error) {
+        result = `Error executing command: ${error.message}`;
+      }
+      if (cmd === "clear") {
+        setIsClearing(true);
+        const logElements = document.querySelectorAll('.console-log-entry');
+        logElements.forEach(el => el.classList.add('clearing'));
+        document.getElementById('console-logs').classList.add('clearing');
+        
+        setTimeout(() => {
+          setLogs([]);
+          setIsClearing(false);
+          document.getElementById('console-logs').classList.remove('clearing');
+        }, 300);
+        return;
+      }
     }
     setLogs([...logs(), { text: result }]);
-    setCommand(""); // Очистить инпут после выполнения команды
+    setCommand("");
   };
 
   const handleKeyDown = (e) => {
@@ -22,12 +41,11 @@ function Main() {
     }
   };
 
-
   return (
     <div class="console-wrapper">
       <div id="console-logs">
         <For each={logs()}>
-          {(log) => <ConsoleLogEntry text={log.text} />}
+          {(log) => <ConsoleLogEntry text={log.text} isClearing={isClearing()} />}
         </For>
       </div>
       <div id="console-input">
@@ -39,10 +57,7 @@ function Main() {
           onKeyDown={handleKeyDown}
           placeholder="Enter command..."
         />
-        <button 
-          id="console-execute" 
-          onClick={executeCommand} 
-        >
+        <button id="console-execute" onClick={executeCommand}>
           Execute
         </button>
       </div>
@@ -53,9 +68,11 @@ function Main() {
 function ConsoleLogEntry({ text }) {
   const [isAnimated, setIsAnimated] = createSignal(true);
 
-  // После определенного времени заменить анимированный текст на обычный
+  // Convert text to string if it's not already
+  const textString = () => (typeof text === 'string' ? text : String(text));
+
   onMount(() => {
-    const totalAnimationTime = text.split(" ").length * 200 + 500; // В миллисекундах
+    const totalAnimationTime = textString().split(" ").length * 200 + 500;
     setTimeout(() => {
       setIsAnimated(false);
     }, totalAnimationTime);
@@ -63,18 +80,19 @@ function ConsoleLogEntry({ text }) {
 
   return (
     <div class="console-log-entry">
-      <Show when={isAnimated()} fallback={<span>{text}</span>}>
-        {text.split(" ").map((word, index) => (
+      <Show when={isAnimated()} fallback={<span>{textString()}</span>}>
+        {textString().split(" ").map((word, index) => (
           <span
             class="console-log-char"
-            style={{ "animation-delay": `${index * 0.2}s`, display: "inline-block" }} // Добавлено для корректной работы пробелов
+            style={{ "animation-delay": `${index * 0.2}s`, display: "inline-block" }}
           >
-            {word}&nbsp; {/* Пробел между словами */}
+            {word}&nbsp;
           </span>
         ))}
       </Show>
     </div>
   );
 }
+
 
 export default Main;

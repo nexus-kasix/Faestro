@@ -5,36 +5,53 @@
 body {
   font-family: 'Roboto', sans-serif;
   background-color: #1f2937;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  transition: background-image 0.5s ease-in-out;
 }
 
 .console-wrapper {
   position: fixed;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
   width: 80%;
   max-width: 600px;
-  background-color: rgba(240, 240, 240, 0.95); /* Легкий сероватый оттенок */
-  backdrop-filter: blur(15px);
+  background-color: rgba(240, 240, 240, 0.95);
   border-radius: 16px;
   padding: 20px;
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
-  transition: transform 0.5s cubic-bezier(0.05, 0.7, 0.1, 1.0), opacity 0.5s cubic-bezier(0.05, 0.7, 0.1, 1.0);
+
+  /* GPU-accelerated transforms */
+  transform: translate3d(-50%, -50%, 0);
+  will-change: transform, opacity;
+  /* Separate transitions for better performance */
+  @media (prefers-reduced-motion: no-preference) {
+    transition: transform 0.5s cubic-bezier(0.05, 0.7, 0.1, 1.0),
+                opacity 0.5s cubic-bezier(0.05, 0.7, 0.1, 1.0);
+  }
+  /* Modern backdrop-filter with fallback */
+  @supports (backdrop-filter: blur(15px)) {
+    backdrop-filter: blur(9px);
+    background-color: rgba(240, 240, 240, 0.8);
+  }
 }
+
+
 
 #console-logs {
   flex-grow: 1;
   overflow-y: auto;
   margin-bottom: 10px;
   border: 1px solid #d1d5db;
+  transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+  max-height: 70vh;
   border-radius: 12px;
   padding: 10px;
   font-family: 'Roboto', monospace;
   background-color: rgba(255, 255, 255, 0.9);
-  transition: opacity 0.5s ease-out, transform 0.5s ease-out;
-  color: #374151; /* Более темный цвет для текста */
+  color: #374151;
 }
 
 #console-input {
@@ -56,7 +73,7 @@ body {
 
 #console-execute {
   padding: 10px;
-  background-color: rgba(100, 116, 139, 0.8); /* Темная кнопка для контраста */
+  background-color: rgba(100, 116, 139, 0.8); /* Те��ная кнопка для контраста */
   border: 2px solid #6b7280;
   border-radius: 9999px;
   cursor: pointer;
@@ -87,7 +104,7 @@ body {
 }
 
 #console-execute:hover {
-  background-color: rgba(79, 93, 113, 1); /* Более темный цвет при наведении */
+  background-color: rgba(79, 93, 113, 1); /* Более темный цвет п��и наведении */
   transform: scale(1.1); /* Легкий эффект увеличения */
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Увеличение тени при наведении */
 }
@@ -98,9 +115,26 @@ body {
 }
 
 .console-log-entry {
-  font-size: 16px; /* Устанавливаем размер шрифта */
-  font-family: 'Roboto', sans-serif; /* Применяем шрифт Roboto */
-  line-height: 1.5; /* Для лучшей читаемости */
+  font-size: 16px;
+  font-family: 'Roboto', sans-serif;
+  line-height: 1.5;
+  transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+}
+
+.console-log-entry.clearing {
+  opacity: 0;
+  transform: translateY(-10px);
+  filter: blur(4px);
+}
+
+#console-logs.clearing {
+  max-height: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  border-color: transparent;
 }
 
 .console-log-char {
