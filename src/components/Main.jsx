@@ -42,25 +42,28 @@ function Main() {
   };
 
   return (
-    <div class="console-wrapper">
-      <div id="console-logs">
-        <For each={logs()}>
-          {(log) => <ConsoleLogEntry text={log.text} isClearing={isClearing()} />}
-        </For>
+    <div class="console-container">
+      <div class="console-wrapper">
+        <div id="console-logs">
+          <For each={logs()}>
+            {(log) => <ConsoleLogEntry text={log.text} isClearing={isClearing()} />}
+          </For>
+        </div>
+        <div id="console-input">
+          <input
+            id="console-command"
+            type="text"
+            value={command()}
+            onInput={(e) => setCommand(e.target.value)}
+            onKeyDown={handleKeyDown}
+            placeholder="Enter command..."
+          />
+          <button id="console-execute" onClick={executeCommand}>
+            Execute
+          </button>
+        </div>
       </div>
-      <div id="console-input">
-        <input
-          id="console-command"
-          type="text"
-          value={command()}
-          onInput={(e) => setCommand(e.target.value)}
-          onKeyDown={handleKeyDown}
-          placeholder="Enter command..."
-        />
-        <button id="console-execute" onClick={executeCommand}>
-          Execute
-        </button>
-      </div>
+      {/* палитра будет добавляться сюда динамически */}
     </div>
   );
 }

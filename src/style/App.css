@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --accent-color: #6b7280;
+  --border-radius-large: 16px;  /* Изменено на 16px */
+  --border-radius-small: 12px;
+  --border-color: #d1d5db;
+  --border-width: 2px;
+}
+
 body {
   font-family: 'Roboto', sans-serif;
   background-color: #1f2937;
@@ -10,35 +18,26 @@ body {
   transition: background-image 0.5s ease-in-out;
 }
 
-.console-wrapper {
+.console-container {
   position: fixed;
   top: 50%;
   left: 50%;
-  width: 80%;
-  max-width: 600px;
+  transform: translate(-50%, -50%);
+  display: flex;
+  gap: 20px;
+}
+
+.console-wrapper {
+  width: 100%;
   background-color: rgba(240, 240, 240, 0.95);
-  border-radius: 16px;
+  border-radius: var(--border-radius-large);
   padding: 20px;
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
-
-  /* GPU-accelerated transforms */
-  transform: translate3d(-50%, -50%, 0);
-  will-change: transform, opacity;
-  /* Separate transitions for better performance */
-  @media (prefers-reduced-motion: no-preference) {
-    transition: transform 0.5s cubic-bezier(0.05, 0.7, 0.1, 1.0),
-                opacity 0.5s cubic-bezier(0.05, 0.7, 0.1, 1.0);
-  }
-  /* Modern backdrop-filter with fallback */
-  @supports (backdrop-filter: blur(15px)) {
-    backdrop-filter: blur(9px);
-    background-color: rgba(240, 240, 240, 0.8);
-  }
+  z-index: 1000;
+  backdrop-filter: blur(9px);
 }
-
-
 
 #console-logs {
   flex-grow: 1;
@@ -47,11 +46,12 @@ body {
   border: 1px solid #d1d5db;
   transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
   max-height: 70vh;
-  border-radius: 12px;
+  border-radius: var(--border-radius-small);
   padding: 10px;
   font-family: 'Roboto', monospace;
   background-color: rgba(255, 255, 255, 0.9);
   color: #374151;
+  min-height: 100px; /* Утанавливаем минимальную высоту */
 }
 
 #console-input {
@@ -62,8 +62,8 @@ body {
 #console-command {
   flex-grow: 1;
   padding: 10px;
-  border: 2px solid #d1d5db;
-  border-radius: 9999px;
+  border: var(--border-width) solid var(--border-color);
+  border-radius: 9999px; /* Полностью закруглено */
   font-family: 'Roboto', sans-serif;
   font-size: 16px;
   outline: none;
@@ -72,17 +72,25 @@ body {
 }
 
 #console-execute {
-  padding: 10px;
-  background-color: rgba(100, 116, 139, 0.8); /* Те��ная кнопка для контраста */
-  border: 2px solid #6b7280;
-  border-radius: 9999px;
-  cursor: pointer;
-  position: relative; /* Для псевдоэлемента */
-  overflow: hidden; /* Скрыть псевдоэлемент, выходящий за пределы кнопки */
-  transition: background-color 0.3s cubic-bezier(0.05, 0.7, 0.1, 1.0), 
-              transform 0.2s ease-in-out, 
-              box-shadow 0.3s cubic-bezier(0.05, 0.7, 0.1, 1.0);
-  color: #fff; /* Белый текст для контраста */
+  padding: 10px 20px;
+  border-radius: 9999px; /* Полнос��ью закруглено */
+  background-color: var(--accent-color);
+  border: var(--border-width) solid var(--accent-color);
+  color: white;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.05, 0.7, 0.1, 1.0);
+}
+
+#console-execute:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-color: var(--accent-color);
+}
+
+#console-execute:active {
+  transform: translateY(1px);
+  border-color: var(--accent-dark);
 }
 
 #console-execute::before {
@@ -90,28 +98,17 @@ body {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 300%; /* Увеличиваем размер для эффекта */
-  height: 300%; /* Увеличиваем размер для эффекта */
+  width: 300%; /* Большой размер для эффекта */
+  height: 300%;
   background: linear-gradient(45deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
   opacity: 0;
   transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
-  border-radius: 50%; /* Круглая форма для эффекта */
-  transform: translate(-50%, -50%); /* Центрируем */
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
 }
 
 #console-execute:hover::before {
-  opacity: 1; /* Показать эффект при наведении */
-}
-
-#console-execute:hover {
-  background-color: rgba(79, 93, 113, 1); /* Более темный цвет п��и наведении */
-  transform: scale(1.1); /* Легкий эффект увеличения */
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Увеличение тени при наведении */
-}
-
-#console-execute:active {
-  transform: scale(0.95); /* Эффект сжатия при клике */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  opacity: 1;
 }
 
 .console-log-entry {
@@ -156,4 +153,51 @@ body {
     transform: translateY(0);
     filter: blur(0);
   }
+}
+
+.color-palette {
+  border-radius: var(--border-radius-large);
+  display: flex;
+  gap: 10px;
+  padding: 15px;
+  background-color: rgba(240, 240, 240, 0.95);
+  border: var(--border-width) solid var(--border-color);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(9px);
+  justify-content: center;
+  align-items: center;
+}
+
+.color-button {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: var(--border-width) solid var(--border-color);
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.color-button:hover {
+  transform: scale(1.1);
+  border-color: var(--accent-color);
+}
+
+.color-button.custom {
+  background: linear-gradient(45deg, #6b7280, #4b5563);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: white;
+}
+
+.color-picker-wrapper {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-bottom: 10px;
+  border-radius: var(--border-radius-small); /* Убедитесь, что это 12px */
+  background: white;
+  padding: 5px;
 }
