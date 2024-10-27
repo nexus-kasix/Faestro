@@ -28,7 +28,9 @@ body {
 }
 
 .console-wrapper {
-  width: 100%;
+  width: 800px; /* Добавляем фиксированную ширину */
+  min-width: 600px; /* Минимальная ширина */
+  max-width: 90vw; /* Максимальная ширина в процентах от ширины экрана */
   background-color: rgba(240, 240, 240, 0.95);
   border-radius: var(--border-radius-large);
   padding: 20px;
@@ -51,7 +53,7 @@ body {
   font-family: 'Roboto', monospace;
   background-color: rgba(255, 255, 255, 0.9);
   color: #374151;
-  min-height: 100px; /* Утанавливаем минимальную высоту */
+  min-height: 300px; /* Увеличиваем минимальную высоту */
 }
 
 #console-input {
@@ -73,7 +75,7 @@ body {
 
 #console-execute {
   padding: 10px 20px;
-  border-radius: 9999px; /* Полнос��ью закруглено */
+  border-radius: 9999px; /* Полносью закруглено */
   background-color: var(--accent-color);
   border: var(--border-width) solid var(--accent-color);
   color: white;
