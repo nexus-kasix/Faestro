@@ -1,7 +1,10 @@
+import "../style/App.css";  // Import Tailwind and any global styles
 import { createSignal, onMount, Show, For } from "solid-js";
 import { commands } from "/src/commands/console.js";
-
 function Main() {
+  console.log = function(message) {
+    setLogs([...logs(), { text: message }]);
+  };
   const [logs, setLogs] = createSignal([]);
   const [command, setCommand] = createSignal("");
   const [isClearing, setIsClearing] = createSignal(false);
@@ -10,6 +13,7 @@ function Main() {
     const cmd = command().split(" ")[0];
     const args = command().split(" ").slice(1);
     let result = `Command not found: ${cmd}`;
+
     
     if (commands[cmd]) {
       try {
@@ -31,16 +35,16 @@ function Main() {
         return;
       }
     }
+    document.getElementById("console-user").innerHTML = window.kernel.user+"@faestro";
     setLogs([...logs(), { text: result }]);
     setCommand("");
   };
-
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
       executeCommand();
     }
   };
-
+  setLogs([...logs(), { text: "To became superuser (root) use command: faestro.su root root (faestro.su username password)" }]);
   return (
     <div class="console-container">
       <div class="console-wrapper">
@@ -50,6 +54,8 @@ function Main() {
           </For>
         </div>
         <div id="console-input">
+        <div id="console-user">user@faestro</div>
+        {/* <div id="console-dir">NO DIR</div> -- Я сделал файловую систему - но у вас нит документов*/}
           <input
             id="console-command"
             type="text"
@@ -66,6 +72,7 @@ function Main() {
       {/* палитра будет добавляться сюда динамически */}
     </div>
   );
+  
 }
 
 function ConsoleLogEntry({ text }) {
@@ -95,6 +102,7 @@ function ConsoleLogEntry({ text }) {
       </Show>
     </div>
   );
+  
 }
 
 

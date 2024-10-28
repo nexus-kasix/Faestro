@@ -72,7 +72,30 @@ body {
   transition: border-color 0.3s cubic-bezier(0.05, 0.7, 0.1, 1.0), filter 0.3s cubic-bezier(0.05, 0.7, 0.1, 1.0);
   background-color: rgba(255, 255, 255, 0.8);
 }
-
+#console-user {
+  /* flex-grow: 1; */
+  padding: 10px;
+  border: var(--border-width) solid var(--border-color);
+  border-radius: 9999px; /* Полностью закруглено */
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  outline: none;
+  position: relative;
+  transition: border-color 0.3s cubic-bezier(0.05, 0.7, 0.1, 1.0), filter 0.3s cubic-bezier(0.05, 0.7, 0.1, 1.0);
+  background-color: rgba(255, 255, 255, 0.8);
+}
+#console-dir {
+  /* flex-grow: 1; */
+  padding: 10px;
+  border: var(--border-width) solid var(--border-color);
+  border-radius: 9999px; /* Полностью закруглено */
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  outline: none;
+  position: relative;
+  transition: border-color 0.3s cubic-bezier(0.05, 0.7, 0.1, 1.0), filter 0.3s cubic-bezier(0.05, 0.7, 0.1, 1.0);
+  background-color: rgba(255, 255, 255, 0.8);
+}
 #console-execute {
   padding: 10px 20px;
   border-radius: 9999px; /* Полносью закруглено */

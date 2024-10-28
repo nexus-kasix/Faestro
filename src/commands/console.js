@@ -1,5 +1,6 @@
 export const commands = {
   clear: () => "Console cleared",
+  cd: () => "Not inplemented yet",
   help: () => "Available commands: faestro.save.log, faestro.version, faestro.link, faestro.theme_engine.background.set.image, faestro.theme_engine.background.set.example.",
   'faestro.save.log': () => "Not implemented yet", // Placeholder, actual implementation depends on your logging setup
   'faestro.version': () => "Faestro version 1.3",
@@ -106,6 +107,25 @@ export const commands = {
     const defaultColor = '#6b7280';
     setThemeColor(defaultColor);
     return "Accent color reset to default.";
+  },
+  'faestro.javascript': (...args) => {
+    if (window.kernel.user == window.kernel.rootuser) {
+      const cmd = args.join(" ")
+      eval(cmd);
+      // return "Erm how i can get"+cmd;
+      return "Your Code Executed";
+    } else {
+      return "faestro.javascript: You must be superuser";
+    }
+  },
+  'faestro.su': (acc,pass) => {
+    window.kernel.chuser(acc,pass)
+    if (acc == window.kernel.user){
+      return "Your account changed to "+acc;
+    } else {
+      return "Wrong password or wrong username!";
+    }
+    
   },
 };
 
