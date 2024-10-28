@@ -1,3 +1,4 @@
+@import url('https://cdn.jsdelivr.net/npm/remixicon@4.4.0/fonts/remixicon.css');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -8,6 +9,7 @@
   --border-radius-small: 12px;
   --border-color: #d1d5db;
   --border-width: 2px;
+  --backdrop-blur: 8px;
 }
 
 body {
@@ -28,17 +30,18 @@ body {
 }
 
 .console-wrapper {
-  width: 800px; /* Добавляем фиксированную ширину */
-  min-width: 600px; /* Минимальная ширина */
-  max-width: 90vw; /* Максимальная ширина в процентах от ширины экрана */
-  background-color: rgba(240, 240, 240, 0.95);
+  width: 800px;
+  min-width: 600px;
+  max-width: 90vw;
+  background-color: rgba(240, 240, 240, 0.85);
   border-radius: var(--border-radius-large);
   padding: 20px;
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
   z-index: 1000;
-  backdrop-filter: blur(9px);
+  backdrop-filter: blur(var(--backdrop-blur));
+  -webkit-backdrop-filter: blur(var(--backdrop-blur));
 }
 
 #console-logs {
@@ -53,6 +56,8 @@ body {
   font-family: 'Roboto', monospace;
   background-color: rgba(255, 255, 255, 0.9);
   color: #374151;
+  -webkit-backdrop-filter: blur(var(--backdrop-blur));
+  backdrop-filter: blur(var(--backdrop-blur));
   min-height: 300px; /* Увеличиваем минимальную высоту */
 }
 
@@ -98,6 +103,7 @@ body {
 }
 #console-execute {
   padding: 10px 20px;
+  border-radius: 9999px; /* Полносью закруглено */
   border-radius: 9999px; /* Полносью закруглено */
   background-color: var(--accent-color);
   border: var(--border-width) solid var(--accent-color);
@@ -188,6 +194,7 @@ body {
   background-color: rgba(240, 240, 240, 0.95);
   border: var(--border-width) solid var(--border-color);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  -webkit-backdrop-filter: blur(9px);
   backdrop-filter: blur(9px);
   justify-content: center;
   align-items: center;
@@ -217,12 +224,98 @@ body {
 }
 
 .color-picker-wrapper {
-  position: absolute;
   bottom: 100%;
   left: 50%;
   transform: translateX(-50%);
   margin-bottom: 10px;
-  border-radius: var(--border-radius-small); /* Убедитесь, что это 12px */
+  border-radius: var(--border-radius-small);
   background: white;
   padding: 5px;
+}
+
+#console-more {
+  padding: 10px;  /* Уменьшаем padding */
+  width: 40px;  /* Фиксированная ширина */
+  height: 40px;  /* Фиксированная высота */
+  border-radius: 9999px;
+  background-color: var(--accent-color);
+  border: var(--border-width) solid var(--accent-color);
+  color: white;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.05, 0.7, 0.1, 1.0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#console-more:hover,
+#console-more:focus {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  outline: none;
+}
+
+#console-more:active {
+  transform: translateY(1px);
+}
+
+#console-more i {
+  font-size: 20px;
+}
+
+.context-menu {
+  position: absolute;
+  bottom: calc(80px);
+  right: 30px;  /* Изменено с left на right */
+  background-color: rgba(255, 255, 255, 0.95);
+  border: var(--border-width) solid var(--border-color);
+  border-radius: var(--border-radius-small);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  z-index: 1000;
+  padding: 8px;
+  min-width: 200px;
+  -webkit-backdrop-filter: blur(var(--backdrop-blur));
+  backdrop-filter: blur(var(--backdrop-blur));
+  transform-origin: bottom right;  /* Изменено */
+  animation: menuAppear 0.2s cubic-bezier(0.05, 0.7, 0.1, 1.0);
+}
+
+@keyframes menuAppear {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.command-option {
+  width: 100%;
+  text-align: left;
+  padding: 8px 12px;
+  border: none;  /* Убираем обводку */
+  background: none;  /* Убираем фон */
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #374151;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  margin: 2px 0;
+}
+
+.command-option:hover {
+  background-color: var(--accent-color);
+  color: white;
+  transform: translateX(4px);
+}
+
+.command-option:focus {
+  outline: none;
+  background-color: var(--accent-color);
+  color: white;
 }
