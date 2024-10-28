@@ -81,6 +81,7 @@ body {
 #console-execute {
   padding: 10px 20px;
   border-radius: 9999px; /* Полносью закруглено */
+  border-radius: 9999px; /* Полносью закруглено */
   background-color: var(--accent-color);
   border: var(--border-width) solid var(--accent-color);
   color: white;
