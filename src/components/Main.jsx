@@ -5,30 +5,31 @@ function Main() {
   const [logs, setLogs] = createSignal([]);
   const [command, setCommand] = createSignal("");
   const [isClearing, setIsClearing] = createSignal(false);
+  const [isMoreOpen, setIsMoreOpen] = createSignal(false);
 
-  const executeCommand = async () => {
-    const cmd = command().split(" ")[0];
-    const args = command().split(" ").slice(1);
-    let result = `Command not found: ${cmd}`;
+
+  const executeCommand = async (cmd) => {
+    const [commandName, ...args] = cmd.split(" ");
+    let result = `Command not found: ${commandName}`;
     
-    if (commands[cmd]) {
+    if (commands[commandName]) {
       try {
-        result = await commands[cmd](...args);
+        result = await commands[commandName](...args);
+        if (commandName === "clear") {
+          setIsClearing(true);
+          const logElements = document.querySelectorAll('.console-log-entry');
+          logElements.forEach(el => el.classList.add('clearing'));
+          document.getElementById('console-logs').classList.add('clearing');
+          
+          setTimeout(() => {
+            setLogs([]);
+            setIsClearing(false);
+            document.getElementById('console-logs').classList.remove('clearing');
+          }, 300);
+          return;
+        }
       } catch (error) {
         result = `Error executing command: ${error.message}`;
-      }
-      if (cmd === "clear") {
-        setIsClearing(true);
-        const logElements = document.querySelectorAll('.console-log-entry');
-        logElements.forEach(el => el.classList.add('clearing'));
-        document.getElementById('console-logs').classList.add('clearing');
-        
-        setTimeout(() => {
-          setLogs([]);
-          setIsClearing(false);
-          document.getElementById('console-logs').classList.remove('clearing');
-        }, 300);
-        return;
       }
     }
     setLogs([...logs(), { text: result }]);
@@ -37,7 +38,7 @@ function Main() {
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
-      executeCommand();
+      executeCommand(command());
     }
   };
 
@@ -58,15 +59,41 @@ function Main() {
             onKeyDown={handleKeyDown}
             placeholder="Enter command..."
           />
-          <button id="console-execute" onClick={executeCommand}>
-            Execute
+          <button 
+            id="console-more" 
+            onClick={() => setIsMoreOpen(!isMoreOpen())}
+            aria-label="More options"
+          >
+            <i class="ri-slash-commands-2"></i>
+          </button>
+          <button 
+            id="console-execute" 
+            onClick={() => executeCommand(command())}
+            aria-label="Execute command"
+          >
+            <i class="ri-send-plane-fill"></i>
           </button>
         </div>
+        {isMoreOpen() && (
+          <div id="more-options" class="context-menu">
+            {Object.keys(commands).map((cmd) => (
+              <button 
+                class="command-option" 
+                onClick={() => {
+                  setCommand(cmd);
+                  setIsMoreOpen(false);
+                }}
+              >
+                {cmd}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
-      {/* палитра будет добавляться сюда динамически */}
     </div>
   );
 }
+
 
 function ConsoleLogEntry({ text }) {
   const [isAnimated, setIsAnimated] = createSignal(true);
