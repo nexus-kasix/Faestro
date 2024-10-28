@@ -1,5 +1,4 @@
 import { kernel }from "./components/kernel";
-import { render } from "solid-js/web";
 
 window.kernel = kernel
 kernel.init()
