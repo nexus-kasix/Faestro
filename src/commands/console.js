@@ -1,5 +1,7 @@
+import { lazy } from "solid-js"; 
 export const commands = {
   clear: () => "Console cleared",
+  cd: () => "Not inplemented yet",
   help: () => "Available commands: faestro.save.log, faestro.version, faestro.link, faestro.theme_engine.background.set.image, faestro.theme_engine.background.set.example.",
   'faestro.save.log': () => "Not implemented yet", // Placeholder, actual implementation depends on your logging setup
   'faestro.version': () => "Faestro version 1.3",
@@ -106,6 +108,78 @@ export const commands = {
     const defaultColor = '#6b7280';
     setThemeColor(defaultColor);
     return "Accent color reset to default.";
+  },
+  'faestro.javascript': (...args) => {
+    if (window.kernel.user == window.kernel.rootuser) {
+      const cmd = args.join(" ")
+      eval(cmd);
+      // return "Erm how i can get"+cmd;
+      return "Your Code Executed";
+    } else {
+      return "faestro.javascript: You must be superuser";
+    }
+  },
+  'faestro.su': (acc,pass) => {
+    window.kernel.chuser(acc,pass)
+    if (acc == window.kernel.user){
+      return "Your account changed to "+acc;
+    } else {
+      return "Wrong password or wrong username!";
+    }
+    
+  },
+  'faestro.user': (thing,user,arg) => {
+    if (window.kernel.rootuser != window.kernel.user){
+      return "faestro.user: you must be superuser!";
+    } else {
+      if (!thing){
+        return "faestro.user: Avalible commands: add [username] [password], del [username], pass [username] [new-password]";
+      } else {
+        const cmds = {
+          'add': (acc,pass) => {
+            if (!window.kernel.users[acc]) {
+              window.kernel.users[acc] = pass;
+              return "faestro.user: account added";
+            } else {
+              return "faestro.user: account alerday exist";
+            }
+          },
+          'del': (acc) => {
+            if (window.kernel.users[acc]) {
+              delete window.kernel.users[acc]
+              if (acc == window.kernel.rootuser) {
+                window.kernel.BSOD("root account removed - system cant work without system account - restart Faestro")
+              }
+              return "faestro.user: account deleted";
+            } else {
+              return "faestro.user: account alerday NOT exist";
+            }
+          },
+          'pass': (acc,pass) => {
+            if (window.kernel.users[acc]) {
+              window.kernel.users[acc] == pass
+              return "faestro.user: account password changed";
+            } else {
+              return "faestro.user: account alerday NOT exist";
+            }
+          },
+        }
+        return cmds[thing](user,arg);
+      }
+    }
+    
+  },
+  'ivn': (cmd, ...args) => {
+    
+    // console.log(cmdsss)
+    // let result = "ivn: invalid command"
+    // async function runner() {
+    //   const { ivncmds } = await import('./ivn'); 
+    //   result = await ivncmds[cmd](...args);
+    //   return result;
+    // }
+    // return runner();
+    return "Not inplemente yet!";
   },
 };
 

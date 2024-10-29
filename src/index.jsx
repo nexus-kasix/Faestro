@@ -1,5 +1,10 @@
-import { render } from "solid-js/web";
-import Main from "./components/Main";
-import "./style/App.css";  // Import Tailwind and any global styles
+import { kernel }from "./components/kernel";
 
-render(() => <Main />, document.getElementById("root"));
+window.kernel = kernel
+kernel.init()
+window.kernel.user = "user"
+if (window.intilizated == true){
+    window.kernel.gui("../components/Main")
+} else {
+    console.log("kernel init - failed");
+}
