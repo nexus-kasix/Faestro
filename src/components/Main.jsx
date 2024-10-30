@@ -15,7 +15,7 @@ function Main() {
     if (commands[commandName]) {
       try {
         result = await commands[commandName](...args);
-        if (commandName === "clear") {
+        if (commandName === "faestro.clear") {
           setIsClearing(true);
           const logElements = document.querySelectorAll('.console-log-entry');
           logElements.forEach(el => el.classList.add('clearing'));

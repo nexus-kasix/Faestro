@@ -5,7 +5,8 @@
 
 :root {
   --accent-color: #6b7280;
-  --border-radius-large: 16px;  /* Изменено на 16px */
+  --accent-dark: #4b5563;
+  --border-radius-large: 16px;
   --border-radius-small: 12px;
   --border-color: #d1d5db;
   --border-width: 2px;
@@ -14,7 +15,7 @@
 
 body {
   font-family: 'Roboto', sans-serif;
-  background-color: #1f2937;
+  background-color: #6b7280;
   background-repeat: no-repeat;
   background-attachment: fixed;
   transition: background-image 0.5s ease-in-out;
@@ -58,7 +59,7 @@ body {
   color: #374151;
   -webkit-backdrop-filter: blur(var(--backdrop-blur));
   backdrop-filter: blur(var(--backdrop-blur));
-  min-height: 300px; /* Увеличиваем минимальную высоту */
+  min-height: 300px;
 }
 
 #console-input {
@@ -70,43 +71,53 @@ body {
   flex-grow: 1;
   padding: 10px;
   border: var(--border-width) solid var(--border-color);
-  border-radius: 9999px; /* Полностью закруглено */
+  border-radius: 9999px;
   font-family: 'Roboto', sans-serif;
   font-size: 16px;
   outline: none;
-  transition: border-color 0.3s cubic-bezier(0.05, 0.7, 0.1, 1.0), filter 0.3s cubic-bezier(0.05, 0.7, 0.1, 1.0);
+  transition: border-color 0.3s cubic-bezier(0.05, 0.7, 0.1, 1.0), 
+              filter 0.3s cubic-bezier(0.05, 0.7, 0.1, 1.0);
   background-color: rgba(255, 255, 255, 0.8);
 }
 
-#console-execute {
+/* Общие стили для кнопок execute и more */
+#console-execute,
+#console-more {
   padding: 10px 20px;
-  border-radius: 9999px; /* Полносью закруглено */
-  border-radius: 9999px; /* Полносью закруглено */
+  border-radius: 9999px;
   background-color: var(--accent-color);
   border: var(--border-width) solid var(--accent-color);
   color: white;
   position: relative;
   overflow: hidden;
   transition: all 0.3s cubic-bezier(0.05, 0.7, 0.1, 1.0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 63.64px;
+  height: 45.45px;
 }
 
-#console-execute:hover {
+#console-execute:hover,
+#console-more:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   border-color: var(--accent-color);
 }
 
-#console-execute:active {
+#console-execute:active,
+#console-more:active {
   transform: translateY(1px);
   border-color: var(--accent-dark);
 }
 
-#console-execute::before {
+#console-execute::before,
+#console-more::before {
   content: '';
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 300%; /* Большой размер для эффекта */
+  width: 300%;
   height: 300%;
   background: linear-gradient(45deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
   opacity: 0;
@@ -115,8 +126,14 @@ body {
   transform: translate(-50%, -50%);
 }
 
-#console-execute:hover::before {
+#console-execute:hover::before,
+#console-more:hover::before {
   opacity: 1;
+}
+
+#console-execute i,
+#console-more i {
+  font-size: 20px;
 }
 
 .console-log-entry {
@@ -135,6 +152,27 @@ body {
   filter: blur(4px);
 }
 
+.color-picker-container {
+  position: relative;
+}
+
+.color-picker-wrapper {
+  position: absolute;
+  z-index: 1000;
+  background: white;
+  padding: 10px;
+  border-radius: var(--border-radius-small);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  border: var(--border-width) solid var(--border-color);
+}
+
+/* Стили для самого пикера */
+.react-colorful {
+  width: 200px !important;
+  height: 200px !important;
+}
+
+
 #console-logs.clearing {
   max-height: 0;
   padding-top: 0;
@@ -146,7 +184,7 @@ body {
   display: inline-block;
   opacity: 0;
   transform: translateY(20px);
-  filter: blur(5px); /* Начальное размытие */
+  filter: blur(5px);
   animation: charFadeIn 0.5s cubic-bezier(0.4, 0.0, 0.2, 1) forwards;
 }
 
@@ -164,17 +202,33 @@ body {
 }
 
 .color-palette {
+  position: fixed;
+  max-width: 400px;
   border-radius: var(--border-radius-large);
   display: flex;
+  flex-wrap: wrap;
   gap: 10px;
   padding: 15px;
   background-color: rgba(240, 240, 240, 0.95);
   border: var(--border-width) solid var(--border-color);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-  -webkit-backdrop-filter: blur(9px);
   backdrop-filter: blur(9px);
+  -webkit-backdrop-filter: blur(9px);
   justify-content: center;
   align-items: center;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 999;
+  animation: fadeIn 0.2s ease-out;
+}
+
+/* Добавьте медиа-запрос для адаптивности */
+@media (max-width: 900px) {
+  .color-palette {
+    width: calc(100% - 40px);
+    min-width: auto;
+  }
 }
 
 .color-button {
@@ -183,69 +237,86 @@ body {
   border-radius: 50%;
   border: var(--border-width) solid var(--border-color);
   cursor: pointer;
-  transition: transform 0.2s;
+  transition: all 0.2s ease;
+  position: relative;
 }
 
 .color-button:hover {
   transform: scale(1.1);
   border-color: var(--accent-color);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
+
+.color-button::after {
+  content: attr(title);
+  position: absolute;
+  bottom: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s ease;
+}
+
+.color-button:hover::after {
+  opacity: 1;
+  visibility: visible;
+}
+
 
 .color-button.custom {
   background: linear-gradient(45deg, #6b7280, #4b5563);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 12px;
   color: white;
-}
-
-.color-picker-wrapper {
-  bottom: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  margin-bottom: 10px;
-  border-radius: var(--border-radius-small);
-  background: white;
-  padding: 5px;
-}
-
-#console-more {
-  padding: 10px;  /* Уменьшаем padding */
-  width: 40px;  /* Фиксированная ширина */
-  height: 40px;  /* Фиксированная высота */
-  border-radius: 9999px;
-  background-color: var(--accent-color);
-  border: var(--border-width) solid var(--accent-color);
-  color: white;
-  position: relative;
-  overflow: hidden;
-  transition: all 0.3s cubic-bezier(0.05, 0.7, 0.1, 1.0);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-#console-more:hover,
-#console-more:focus {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  outline: none;
-}
-
-#console-more:active {
-  transform: translateY(1px);
-}
-
-#console-more i {
   font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
+
+.color-palette-close {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: var(--accent-color);
+  color: white;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+@keyframes fadeIn {
+  from {
+      opacity: 0;
+      transform: translate(-50%, -48%);
+  }
+  to {
+      opacity: 1;
+      transform: translate(-50%, -50%);
+  }
+}
+
+
+
 
 .context-menu {
   position: absolute;
+  font-family: 'Roboto', sans-serif;
   bottom: calc(80px);
-  right: 30px;  /* Изменено с left на right */
-  background-color: rgba(255, 255, 255, 0.95);
+  right: 40px;
+  background-color: rgba(255, 255, 255, 0.85);
   border: var(--border-width) solid var(--border-color);
   border-radius: var(--border-radius-small);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
@@ -254,8 +325,10 @@ body {
   min-width: 200px;
   -webkit-backdrop-filter: blur(var(--backdrop-blur));
   backdrop-filter: blur(var(--backdrop-blur));
-  transform-origin: bottom right;  /* Изменено */
+  transform-origin: bottom right;
   animation: menuAppear 0.2s cubic-bezier(0.05, 0.7, 0.1, 1.0);
+  transition: backdrop-filter 0.3s ease-in-out, 
+              background-color 0.3s ease-in-out;
 }
 
 @keyframes menuAppear {
@@ -273,8 +346,9 @@ body {
   width: 100%;
   text-align: left;
   padding: 8px 12px;
-  border: none;  /* Убираем обводку */
-  background: none;  /* Убираем фон */
+  border: none;
+  font-family: 'Roboto', sans-serif;
+  background: none;
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -288,7 +362,6 @@ body {
 .command-option:hover {
   background-color: var(--accent-color);
   color: white;
-  transform: translateX(4px);
 }
 
 .command-option:focus {

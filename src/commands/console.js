@@ -1,8 +1,6 @@
 export const commands = {
-  clear: () => "Console cleared",
-  help: () => "Available commands: faestro.save.log, faestro.version, faestro.link, faestro.theme_engine.background.set.image, faestro.theme_engine.background.set.example.",
-  'faestro.save.log': () => "Not implemented yet", // Placeholder, actual implementation depends on your logging setup
-  'faestro.version': () => "Faestro version 1.3",
+  'faestro.clear': () => "Console cleared",
+'faestro.version': () => "Faestro version 1.6 'Feather Fix'",
   'faestro.link': (link) => {
     if (!link.startsWith('http://') && !link.startsWith('https://')) {
       link = 'https://' + link;
@@ -15,8 +13,18 @@ export const commands = {
       return `Error opening ${link}: ${error.message}`;
     }
   },
-  'faestro.credits': () => "Thanks to: [solid.js](https://www.solidjs.com/), artificial intelligence, and the world for making this project possible.",
-'faestro.theme_engine.background.set.image': () => {
+  'faestro.credits': () => `Special thanks to:
+• SolidJS - The reactive JavaScript framework.
+• RemixIcon - Beautiful open-source icons.
+• Vite - Next Generation Frontend Tooling.
+• The open-source community.
+• Everyone who contributed to making Faestro possible.
+• Artificial Intelligence & LLMs.
+
+Version: Faestro 1.6 'Feather Fix'
+© 2024 Nexus Projects.`,
+
+'faestro.safarium.background.set.image': () => {
   return new Promise((resolve) => {
     const input = document.createElement('input');
     input.type = 'file';
@@ -42,67 +50,117 @@ export const commands = {
     input.click();
   });
 },
-  'faestro.theme_engine.background.set.example.1': () => {
-    const exampleImage = '/wallpapers/example1.jpg';
+  'faestro.safarium.background.set.example.1': () => {
+    const exampleImage = '/public/wallpapers/example1.jpg';
     document.body.style.backgroundImage = `url(${exampleImage})`;
     document.body.style.backgroundSize = 'cover';
     document.body.style.backgroundPosition = 'center';
     return `Background image set to example: ${exampleImage}`;
   },
-  'faestro.theme_engine.background.set.example.2': () => {
-    const exampleImage = '/wallpapers/example2.jpg';
+  'faestro.safarium.background.set.example.2': () => {
+    const exampleImage = '/public/wallpapers/example2.jpg';
     document.body.style.backgroundImage = `url(${exampleImage})`;
     document.body.style.backgroundSize = 'cover';
     document.body.style.backgroundPosition = 'center';
     return `Background image set to example: ${exampleImage}`;
   },
-  'faestro.theme_engine.accent_color.set': () => {
+
+'faestro.safarium.background.reset': () => {
+  document.body.style.backgroundImage = 'none';
+  document.body.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--accent-color').trim();
+  return "Background reset to accent color";
+},
+
+  'faestro.safarium.accent_color.set': () => {
+    // Удаляем существующую палитру, если она есть
+    const existingPalette = document.querySelector('.color-palette');
+    if (existingPalette) {
+        existingPalette.remove();
+    }
+
     const colorPalette = document.createElement('div');
     colorPalette.className = 'color-palette';
 
-    // Более приглушенные цвета
+    // Предопределенные цвета
     const colors = [
-      '#6b7280', // Default gray
-      '#64748b', // Slate
-      '#71717a', // Zinc
-      '#737373', // Neutral
-      '#78716c', // Stone
-      '#custom'  // Custom color option
+        { hex: '#6b7280', name: 'Default Gray' },
+        { hex: '#64748b', name: 'Slate' },
+        { hex: '#71717a', name: 'Zinc' },
+        { hex: '#737373', name: 'Neutral' },
+        { hex: '#78716c', name: 'Stone' },
+        { hex: '#custom', name: 'Custom' }
     ];
 
-    colors.forEach(color => {
-      const colorButton = document.createElement('button');
-      colorButton.className = 'color-button';
-      
-      if (color === '#custom') {
-        colorButton.className += ' custom';
-        colorButton.textContent = '+';
-        colorButton.addEventListener('click', () => {
-          const input = document.createElement('input');
-          input.type = 'color';
-          input.value = '#6b7280';
-          input.addEventListener('change', (e) => {
-            setThemeColor(e.target.value);
-            colorPalette.remove();
-          });
-          input.click();
-        });
-      } else {
-        colorButton.style.backgroundColor = color;
-        colorButton.addEventListener('click', () => {
-          setThemeColor(color);
-          colorPalette.remove();
-        });
-      }
-      
-      colorPalette.appendChild(colorButton);
+    colors.forEach(({ hex, name }) => {
+        const colorButton = document.createElement('button');
+        colorButton.className = 'color-button';
+        colorButton.setAttribute('title', name);
+        
+        if (hex === '#custom') {
+            colorButton.className += ' custom';
+            colorButton.textContent = '+';
+            
+            colorButton.addEventListener('click', () => {
+                const input = document.createElement('input');
+                input.type = 'color';
+                input.value = '#6b7280';
+                
+                // Обработчик изменения цвета
+                input.addEventListener('change', (e) => {
+                    const newColor = e.target.value;
+                    setThemeColor(newColor);
+                    colorPalette.remove();
+                });
+
+                // Обработчик отмены выбора
+                input.addEventListener('cancel', () => {
+                    colorPalette.remove();
+                });
+
+                input.click();
+            });
+        } else {
+            colorButton.style.backgroundColor = hex;
+            
+            // Добавляем эффект при наведении через data-атрибут
+            colorButton.setAttribute('data-color', hex);
+            
+            colorButton.addEventListener('click', () => {
+                setThemeColor(hex);
+                colorPalette.remove();
+            });
+        }
+        
+        colorPalette.appendChild(colorButton);
     });
+
+    // Добавляем кнопку закрытия
+    const closeButton = document.createElement('button');
+    closeButton.className = 'color-palette-close';
+    closeButton.innerHTML = '&times;';
+    closeButton.addEventListener('click', () => {
+        colorPalette.remove();
+    });
+    colorPalette.appendChild(closeButton);
+
+    // Добавляем обработчик клика вне палитры
+    const handleClickOutside = (event) => {
+        if (!colorPalette.contains(event.target)) {
+            colorPalette.remove();
+            document.removeEventListener('click', handleClickOutside);
+        }
+    };
+
+    // Даём палитре время появиться перед добавлением обработчика
+    setTimeout(() => {
+        document.addEventListener('click', handleClickOutside);
+    }, 100);
 
     document.body.appendChild(colorPalette);
     return "Color palette opened. Click a color to set the accent.";
-  },
+},
 
-  'faestro.theme_engine.accent_color.reset': () => {
+  'faestro.safarium.accent_color.reset': () => {
     const defaultColor = '#6b7280';
     setThemeColor(defaultColor);
     return "Accent color reset to default.";
