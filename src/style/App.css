@@ -3,6 +3,7 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ROOT VARIABLES */
 :root {
   --accent-color: #6b7280;
   --border-radius-large: 16px;  /* Изменено на 16px */
@@ -12,6 +13,7 @@
   --backdrop-blur: 8px;
 }
 
+/* BASE STYLES */
 body {
   font-family: 'Roboto', sans-serif;
   background-color: #1f2937;
@@ -20,6 +22,7 @@ body {
   transition: background-image 0.5s ease-in-out;
 }
 
+/* CONSOLE STYLES */
 .console-container {
   position: fixed;
   top: 50%;
@@ -31,7 +34,7 @@ body {
 
 .console-wrapper {
   width: 800px;
-  min-width: 600px;
+  min-width: 300px; /* Уменьшаем минимальную ширину */
   max-width: 90vw;
   background-color: rgba(240, 240, 240, 0.85);
   border-radius: var(--border-radius-large);
@@ -163,6 +166,27 @@ body {
   }
 }
 
+/* COLOR PICKER STYLES */
+.color-picker-container {
+  position: relative;
+}
+
+.color-picker-wrapper {
+  position: absolute;
+  z-index: 1000;
+  background: white;
+  padding: 10px;
+  border-radius: var(--border-radius-small);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  border: var(--border-width) solid var(--border-color);
+}
+
+.react-colorful {
+  width: 200px !important;
+  height: 200px !important;
+}
+
+/* COLOR PALETTE STYLES */
 .color-palette {
   border-radius: var(--border-radius-large);
   display: flex;
