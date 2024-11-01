@@ -21,7 +21,7 @@ export const commands = {
 • Everyone who contributed to making Faestro possible.
 • Artificial Intelligence & LLMs.
 
-Version: Faestro 1.6 'Feather Fix'
+Version: Faestro 1.6 'Feather Fix' LTS.
 © 2024 Nexus Projects.`,
 
 'faestro.safarium.background.set.image': () => {
