@@ -1,6 +1,6 @@
 export const commands = {
   'faestro.clear': () => "Console cleared",
-'faestro.version': () => "Faestro version 1.6 'Feather Fix'",
+'faestro.version': () => "Faestro version 1.6 'Feather Fix' LTS.",
   'faestro.link': (link) => {
     if (!link.startsWith('http://') && !link.startsWith('https://')) {
       link = 'https://' + link;
