@@ -1,6 +1,6 @@
 export const commands = {
   'faestro.clear': () => "Console cleared",
-'faestro.version': () => "Faestro version 1.6 'Feather Fix'",
+  'faestro.version': () => "Faestro version 1.6 'Feather Fix'",
   'faestro.link': (link) => {
     if (!link.startsWith('http://') && !link.startsWith('https://')) {
       link = 'https://' + link;
@@ -72,7 +72,6 @@ Version: Faestro 1.6 'Feather Fix'
 },
 
   'faestro.safarium.accent_color.set': () => {
-    // Удаляем существующую палитру, если она есть
     const existingPalette = document.querySelector('.color-palette');
     if (existingPalette) {
         existingPalette.remove();
@@ -81,7 +80,6 @@ Version: Faestro 1.6 'Feather Fix'
     const colorPalette = document.createElement('div');
     colorPalette.className = 'color-palette';
 
-    // Предопределенные цвета
     const colors = [
         { hex: '#6b7280', name: 'Default Gray' },
         { hex: '#64748b', name: 'Slate' },
@@ -105,14 +103,12 @@ Version: Faestro 1.6 'Feather Fix'
                 input.type = 'color';
                 input.value = '#6b7280';
                 
-                // Обработчик изменения цвета
                 input.addEventListener('change', (e) => {
                     const newColor = e.target.value;
                     setThemeColor(newColor);
                     colorPalette.remove();
                 });
 
-                // Обработчик отмены выбора
                 input.addEventListener('cancel', () => {
                     colorPalette.remove();
                 });
@@ -121,8 +117,6 @@ Version: Faestro 1.6 'Feather Fix'
             });
         } else {
             colorButton.style.backgroundColor = hex;
-            
-            // Добавляем эффект при наведении через data-атрибут
             colorButton.setAttribute('data-color', hex);
             
             colorButton.addEventListener('click', () => {
@@ -134,7 +128,6 @@ Version: Faestro 1.6 'Feather Fix'
         colorPalette.appendChild(colorButton);
     });
 
-    // Добавляем кнопку закрытия
     const closeButton = document.createElement('button');
     closeButton.className = 'color-palette-close';
     closeButton.innerHTML = '&times;';
@@ -143,7 +136,6 @@ Version: Faestro 1.6 'Feather Fix'
     });
     colorPalette.appendChild(closeButton);
 
-    // Добавляем обработчик клика вне палитры
     const handleClickOutside = (event) => {
         if (!colorPalette.contains(event.target)) {
             colorPalette.remove();
@@ -151,7 +143,6 @@ Version: Faestro 1.6 'Feather Fix'
         }
     };
 
-    // Даём палитре время появиться перед добавлением обработчика
     setTimeout(() => {
         document.addEventListener('click', handleClickOutside);
     }, 100);
@@ -168,39 +159,32 @@ Version: Faestro 1.6 'Feather Fix'
 };
 
 function setThemeColor(color) {
-  // Основной акцентный цвет
   document.documentElement.style.setProperty('--accent-color', color);
   
-  // Вариации цвета для разных компонентов
   const rgb = hexToRgb(color);
   if (rgb) {
-    // Более светлый вариант для hover эффектов
     document.documentElement.style.setProperty(
       '--accent-light', 
       `rgba(${rgb.r + 20}, ${rgb.g + 20}, ${rgb.b + 20}, 1)`
     );
     
-    // Более темный вариант для активных состояний
     document.documentElement.style.setProperty(
       '--accent-dark', 
       `rgba(${rgb.r - 20}, ${rgb.g - 20}, ${rgb.b - 20}, 1)`
     );
     
-    // Прозрачный вариант для фонов
     document.documentElement.style.setProperty(
       '--accent-transparent', 
       `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.1)`
     );
   }
   
-  // Если фон - это цвет, применяем акцентный цвет и к нему
   const currentBg = getComputedStyle(document.body).backgroundColor;
   if (currentBg.includes('rgb') && !document.body.style.backgroundImage) {
     document.body.style.backgroundColor = color;
   }
 }
 
-// Вспомогательная функция для конвертации HEX в RGB
 function hexToRgb(hex) {
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
   return result ? {

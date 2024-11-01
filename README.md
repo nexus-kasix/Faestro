@@ -11,3 +11,12 @@ Nexus Faestro is a modern, interactive web console application built with [Solid
 - 🌐 Background customization options
 - 🔍 Command history and suggestions
 - 🛠️ Built-in developer tools
+
+# 🌳 Branch Management Overview
+
+| Branch | Purpose | Status |
+|--------|---------|--------|
+| `LTS` | Long-Term Support | 🟢 Stable |
+| `main` | Main | 🟡 Main |
+| `dev` | Early Features | 🟠 Experimental |
+| `ivan-branch` | Feature Development | 🔵 Experimental |
