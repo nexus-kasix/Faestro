@@ -635,6 +635,7 @@ body {
 .loading-screen.hidden {
   opacity: 0;
   visibility: hidden;
+  transition: opacity 0.5s ease, visibility 0s 0.5s;
 }
 
 .logo-container {
@@ -739,17 +740,19 @@ body {
 .loading-states {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
   font-size: 14px;
-  color: #666;
+  min-width: 240px;
 }
 
 .loading-state {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto;
   align-items: center;
-  gap: 10px;
+  gap: 15px;
   opacity: 0.5;
-  transition: all 0.3s ease;
+  color: #888;
+  transition: opacity 0.3s ease, color 0.3s ease;
 }
 
 .loading-state.loaded {
@@ -758,12 +761,1088 @@ body {
 }
 
 .loading-indicator {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: currentColor;
+  font-size: 18px;
+  transition: all 0.3s ease;
 }
 
-.loading-state.loaded .loading-indicator {
+.loading-indicator.animate {
+  animation: indicatorPop 0.3s forwards;
+}
+
+.loading-indicator:not(.ri-checkbox-circle-fill) {
+  animation: loadingSpin 1.2s linear infinite;
+}
+
+@keyframes loadingSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes indicatorPop {
+  0% { transform: scale(0.5); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* Анимация завершения всей загрузки */
+.loading-screen.hidden {
+  animation: completeLoading 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  animation-fill-mode: forwards;
+  transition: opacity 0.5s ease, visibility 0s 0.5s;
+}
+
+@keyframes completeLoading {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(0);
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+.loading-indicator {
+  transition: all 0.3s ease;
+}
+
+.animate-loading {
+  animation: indicatorPop 0.5s ease-in-out;
+}
+
+/* Loading Indicator Animations */
+.loading-indicator.animate-loading {
+  animation: loadingSpin 1.2s linear infinite;
+}
+
+.loading-indicator.animate-complete {
+  animation: completeLoading 0.5s ease forwards;
+}
+
+/* Добавить в App.css */
+/* Mobile Device Styles */
+body.mobile-device .console-wrapper {
+  width: 95vw;
+  min-width: 280px;
+  max-width: 400px; /* Limit maximum width */
+  height: auto;
+  padding: 15px;
+}
+
+body.mobile-device #console-logs {
+  font-size: 14px;
+  min-height: 200px;
+  max-height: 60vh; /* Reduce height */
+}
+
+body.mobile-device #console-input {
+  gap: 8px; /* Reduce gap between elements */
+}
+
+body.mobile-device #console-command {
+  font-size: 14px;
+  padding: 8px 12px;
+}
+
+body.mobile-device #console-execute,
+body.mobile-device #console-more {
+  width: 40px; /* Make buttons slightly smaller */
+  height: 40px;
+  padding: 8px;
+}
+
+body.mobile-device #console-execute i,
+body.mobile-device #console-more i {
+  font-size: 18px;
+}
+
+/* Адаптивные стили для Welcome экрана */
+body.mobile-device .welcome-container {
+  width: 100vw;
+  height: 100vh;
+  border-radius: 0;
+  padding: 20px;
+}
+
+body.mobile-device .device-button,
+body.mobile-device .option-button {
+  padding: 12px 20px;
+  font-size: 14px;
+}
+
+body.mobile-device .color-selection button {
+  min-width: 50px;
+  min-height: 50px;
+}
+
+/* Галерея обоев */
+.gallery-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(5px);
+  z-index: 9999;
+}
+
+/* gallery.css */
+.wallpaper-gallery {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--background-light);
+  border-radius: var(--border-radius-large);
+  padding: 55px 20px 20px; /* Увеличен верхний отступ */
+  width: min(900px, 90vw);
+  height: min(700px, 85vh);
+  overflow: hidden;
+  z-index: 10000;
+  border: var(--border-width) solid var(--border-color);
+  box-shadow: var(--box-shadow-default);
+  backdrop-filter: var(--common-blur);
+}
+
+.wallpaper-grid {
+  overflow-y: auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+  padding: 4px;
+}
+
+.wallpaper-item {
+  aspect-ratio: 16/9;
+  border-radius: var(--border-radius-small);
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.3s var(--transition-bezier);
+  position: relative;
+  border: 2px solid transparent;
+}
+
+.wallpaper-item:hover {
+  transform: translateY(-4px);
+  border-color: var(--accent-color);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.wallpaper-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s var(--transition-bezier);
+}
+
+.wallpaper-item:hover img {
+  transform: scale(1.1);
+}
+
+.gallery-close {
+  position: absolute;
+  top: 12px; /* Отступ от верхнего края */
+  right: 12px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
   background: var(--accent-color);
+  color: white;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  z-index: 1;
+}
+
+.gallery-close:hover {
+  transform: rotate(90deg);
+  background: var(--accent-dark);
+}
+
+/* Медиа-запросы */
+@media (max-width: 768px) {
+  .wallpaper-gallery {
+    padding: 20px;
+  }
+  
+  .wallpaper-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .wallpaper-gallery {
+    width: 100vw;
+    height: 100vh;
+    border-radius: 0;
+  }
+  
+  .wallpaper-grid {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 8px;
+  }
+}
+
+/* loading.css */
+.loading-states {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  font-size: 14px;
+  min-width: 240px;
+}
+
+.loading-state {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 15px;
+  opacity: 0.5;
+  color: #888;
+  transition: opacity 0.3s ease, color 0.3s ease;
+}
+
+.loading-state.loaded {
+  opacity: 1;
+  color: var(--accent-color);
+}
+
+.loading-indicator {
+  font-size: 18px;
+  transition: all 0.3s ease;
+}
+
+.loading-indicator.animate {
+  animation: indicatorPop 0.3s forwards;
+}
+
+.loading-indicator:not(.ri-checkbox-circle-fill) {
+  animation: loadingSpin 1.2s linear infinite;
+}
+
+@keyframes loadingSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes indicatorPop {
+  0% { transform: scale(0.5); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* Анимация завершения всей загрузки */
+.loading-screen.hidden {
+  animation: completeLoading 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  animation-fill-mode: forwards;
+  transition: opacity 0.5s ease, visibility 0s 0.5s;
+}
+
+@keyframes completeLoading {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(0);
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+.loading-indicator {
+  transition: all 0.3s ease;
+}
+
+.animate-loading {
+  animation: indicatorPop 0.5s ease-in-out;
+}
+
+/* Loading Indicator Animations */
+.loading-indicator.animate-loading {
+  animation: loadingSpin 1.2s linear infinite;
+}
+
+.loading-indicator.animate-complete {
+  animation: completeLoading 0.5s ease forwards;
+}
+
+/* Добавить в App.css */
+/* Mobile Device Styles */
+body.mobile-device .console-wrapper {
+  width: 95vw;
+  min-width: 280px;
+  max-width: 400px; /* Limit maximum width */
+  height: auto;
+  padding: 15px;
+}
+
+body.mobile-device #console-logs {
+  font-size: 14px;
+  min-height: 200px;
+  max-height: 60vh; /* Reduce height */
+}
+
+body.mobile-device #console-input {
+  gap: 8px; /* Reduce gap between elements */
+}
+
+body.mobile-device #console-command {
+  font-size: 14px;
+  padding: 8px 12px;
+}
+
+body.mobile-device #console-execute,
+body.mobile-device #console-more {
+  width: 40px; /* Make buttons slightly smaller */
+  height: 40px;
+  padding: 8px;
+}
+
+body.mobile-device #console-execute i,
+body.mobile-device #console-more i {
+  font-size: 18px;
+}
+
+/* Адаптивные стили для Welcome экрана */
+body.mobile-device .welcome-container {
+  width: 100vw;
+  height: 100vh;
+  border-radius: 0;
+  padding: 20px;
+}
+
+body.mobile-device .device-button,
+body.mobile-device .option-button {
+  padding: 12px 20px;
+  font-size: 14px;
+}
+
+body.mobile-device .color-selection button {
+  min-width: 50px;
+  min-height: 50px;
+}
+
+/* Галерея обоев */
+.gallery-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(5px);
+  z-index: 9999;
+}
+
+/* gallery.css */
+.wallpaper-gallery {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--background-light);
+  border-radius: var(--border-radius-large);
+  padding: 55px 20px 20px; /* Увеличен верхний отступ */
+  width: min(900px, 90vw);
+  height: min(700px, 85vh);
+  overflow: hidden;
+  z-index: 10000;
+  border: var(--border-width) solid var(--border-color);
+  box-shadow: var(--box-shadow-default);
+  backdrop-filter: var(--common-blur);
+}
+
+.wallpaper-grid {
+  overflow-y: auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+  padding: 4px;
+}
+
+.wallpaper-item {
+  aspect-ratio: 16/9;
+  border-radius: var(--border-radius-small);
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.3s var(--transition-bezier);
+  position: relative;
+  border: 2px solid transparent;
+}
+
+.wallpaper-item:hover {
+  transform: translateY(-4px);
+  border-color: var(--accent-color);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.wallpaper-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s var(--transition-bezier);
+}
+
+.wallpaper-item:hover img {
+  transform: scale(1.1);
+}
+
+.gallery-close {
+  position: absolute;
+  top: 12px; /* Отступ от верхнего края */
+  right: 12px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--accent-color);
+  color: white;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  z-index: 1;
+}
+
+.gallery-close:hover {
+  transform: rotate(90deg);
+  background: var(--accent-dark);
+}
+
+/* Медиа-запросы */
+@media (max-width: 768px) {
+  .wallpaper-gallery {
+    padding: 20px;
+  }
+  
+  .wallpaper-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .wallpaper-gallery {
+    width: 100vw;
+    height: 100vh;
+    border-radius: 0;
+  }
+  
+  .wallpaper-grid {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 8px;
+  }
+}
+
+/* loading.css */
+.loading-states {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  font-size: 14px;
+  min-width: 240px;
+}
+
+.loading-state {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 15px;
+  opacity: 0.5;
+  color: #888;
+  transition: opacity 0.3s ease, color 0.3s ease;
+}
+
+.loading-state.loaded {
+  opacity: 1;
+  color: var(--accent-color);
+}
+
+.loading-indicator {
+  font-size: 18px;
+  transition: all 0.3s ease;
+}
+
+.loading-indicator.animate {
+  animation: indicatorPop 0.3s forwards;
+}
+
+.loading-indicator:not(.ri-checkbox-circle-fill) {
+  animation: loadingSpin 1.2s linear infinite;
+}
+
+@keyframes loadingSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes indicatorPop {
+  0% { transform: scale(0.5); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* Анимация завершения всей загрузки */
+.loading-screen.hidden {
+  animation: completeLoading 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  animation-fill-mode: forwards;
+  transition: opacity 0.5s ease, visibility 0s 0.5s;
+}
+
+@keyframes completeLoading {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(0);
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+.loading-indicator {
+  transition: all 0.3s ease;
+}
+
+.animate-loading {
+  animation: indicatorPop 0.5s ease-in-out;
+}
+
+/* Loading Indicator Animations */
+.loading-indicator.animate-loading {
+  animation: loadingSpin 1.2s linear infinite;
+}
+
+.loading-indicator.animate-complete {
+  animation: completeLoading 0.5s ease forwards;
+}
+
+/* Добавить в App.css */
+/* Mobile Device Styles */
+body.mobile-device .console-wrapper {
+  width: 95vw;
+  min-width: 280px;
+  max-width: 400px; /* Limit maximum width */
+  height: auto;
+  padding: 15px;
+}
+
+body.mobile-device #console-logs {
+  font-size: 14px;
+  min-height: 200px;
+  max-height: 60vh; /* Reduce height */
+}
+
+body.mobile-device #console-input {
+  gap: 8px; /* Reduce gap between elements */
+}
+
+body.mobile-device #console-command {
+  font-size: 14px;
+  padding: 8px 12px;
+}
+
+body.mobile-device #console-execute,
+body.mobile-device #console-more {
+  width: 40px; /* Make buttons slightly smaller */
+  height: 40px;
+  padding: 8px;
+}
+
+body.mobile-device #console-execute i,
+body.mobile-device #console-more i {
+  font-size: 18px;
+}
+
+/* Адаптивные стили для Welcome экрана */
+body.mobile-device .welcome-container {
+  width: 100vw;
+  height: 100vh;
+  border-radius: 0;
+  padding: 20px;
+}
+
+body.mobile-device .device-button,
+body.mobile-device .option-button {
+  padding: 12px 20px;
+  font-size: 14px;
+}
+
+body.mobile-device .color-selection button {
+  min-width: 50px;
+  min-height: 50px;
+}
+
+/* Галерея обоев */
+.gallery-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(5px);
+  z-index: 9999;
+}
+
+/* gallery.css */
+.wallpaper-gallery {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--background-light);
+  border-radius: var(--border-radius-large);
+  padding: 55px 20px 20px; /* Увеличен верхний отступ */
+  width: min(900px, 90vw);
+  height: min(700px, 85vh);
+  overflow: hidden;
+  z-index: 10000;
+  border: var(--border-width) solid var(--border-color);
+  box-shadow: var(--box-shadow-default);
+  backdrop-filter: var(--common-blur);
+}
+
+.wallpaper-grid {
+  overflow-y: auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+  padding: 4px;
+}
+
+.wallpaper-item {
+  aspect-ratio: 16/9;
+  border-radius: var(--border-radius-small);
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.3s var(--transition-bezier);
+  position: relative;
+  border: 2px solid transparent;
+}
+
+.wallpaper-item:hover {
+  transform: translateY(-4px);
+  border-color: var(--accent-color);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.wallpaper-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s var(--transition-bezier);
+}
+
+.wallpaper-item:hover img {
+  transform: scale(1.1);
+}
+
+.gallery-close {
+  position: absolute;
+  top: 12px; /* Отступ от верхнего края */
+  right: 12px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--accent-color);
+  color: white;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  z-index: 1;
+}
+
+.gallery-close:hover {
+  transform: rotate(90deg);
+  background: var(--accent-dark);
+}
+
+/* Медиа-запросы */
+@media (max-width: 768px) {
+  .wallpaper-gallery {
+    padding: 20px;
+  }
+  
+  .wallpaper-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .wallpaper-gallery {
+    width: 100vw;
+    height: 100vh;
+    border-radius: 0;
+  }
+  
+  .wallpaper-grid {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 8px;
+  }
+}
+
+/* loading.css */
+.loading-states {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  font-size: 14px;
+  min-width: 240px;
+}
+
+.loading-state {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 15px;
+  opacity: 0.5;
+  color: #888;
+  transition: opacity 0.3s ease, color 0.3s ease;
+}
+
+.loading-state.loaded {
+  opacity: 1;
+  color: var(--accent-color);
+}
+
+.loading-indicator {
+  font-size: 18px;
+  transition: all 0.3s ease;
+}
+
+.loading-indicator.animate {
+  animation: indicatorPop 0.3s forwards;
+}
+
+.loading-indicator:not(.ri-checkbox-circle-fill) {
+  animation: loadingSpin 1.2s linear infinite;
+}
+
+@keyframes loadingSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes indicatorPop {
+  0% { transform: scale(0.5); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* Анимация завершения всей загрузки */
+.loading-screen.hidden {
+  animation: completeLoading 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  animation-fill-mode: forwards;
+  transition: opacity 0.5s ease, visibility 0s 0.5s;
+}
+
+@keyframes completeLoading {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(0);
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+.loading-indicator {
+  transition: all 0.3s ease;
+}
+
+.animate-loading {
+  animation: indicatorPop 0.5s ease-in-out;
+}
+
+/* Loading Indicator Animations */
+.loading-indicator.animate-loading {
+  animation: loadingSpin 1.2s linear infinite;
+}
+
+.loading-indicator.animate-complete {
+  animation: completeLoading 0.5s ease forwards;
+}
+
+/* Добавить в App.css */
+/* Mobile Device Styles */
+body.mobile-device .console-wrapper {
+  width: 95vw;
+  min-width: 280px;
+  max-width: 400px; /* Limit maximum width */
+  height: auto;
+  padding: 15px;
+}
+
+body.mobile-device #console-logs {
+  font-size: 14px;
+  min-height: 200px;
+  max-height: 60vh; /* Reduce height */
+}
+
+body.mobile-device #console-input {
+  gap: 8px; /* Reduce gap between elements */
+}
+
+body.mobile-device #console-command {
+  font-size: 14px;
+  padding: 8px 12px;
+}
+
+body.mobile-device #console-execute,
+body.mobile-device #console-more {
+  width: 40px; /* Make buttons slightly smaller */
+  height: 40px;
+  padding: 8px;
+}
+
+body.mobile-device #console-execute i,
+body.mobile-device #console-more i {
+  font-size: 18px;
+}
+
+/* Адаптивные стили для Welcome экрана */
+body.mobile-device .welcome-container {
+  width: 100vw;
+  height: 100vh;
+  border-radius: 0;
+  padding: 20px;
+}
+
+body.mobile-device .device-button,
+body.mobile-device .option-button {
+  padding: 12px 20px;
+  font-size: 14px;
+}
+
+body.mobile-device .color-selection button {
+  min-width: 50px;
+  min-height: 50px;
+}
+
+/* Галерея обоев */
+.gallery-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(5px);
+  z-index: 9999;
+}
+
+/* gallery.css */
+.wallpaper-gallery {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--background-light);
+  border-radius: var(--border-radius-large);
+  padding: 55px 20px 20px; /* Увеличен верхний отступ */
+  width: min(900px, 90vw);
+  height: min(700px, 85vh);
+  overflow: hidden;
+  z-index: 10000;
+  border: var(--border-width) solid var(--border-color);
+  box-shadow: var(--box-shadow-default);
+  backdrop-filter: var(--common-blur);
+}
+
+.wallpaper-grid {
+  overflow-y: auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+  padding: 4px;
+}
+
+.wallpaper-item {
+  aspect-ratio: 16/9;
+  border-radius: var(--border-radius-small);
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.3s var(--transition-bezier);
+  position: relative;
+  border: 2px solid transparent;
+}
+
+.wallpaper-item:hover {
+  transform: translateY(-4px);
+  border-color: var(--accent-color);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.wallpaper-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s var(--transition-bezier);
+}
+
+.wallpaper-item:hover img {
+  transform: scale(1.1);
+}
+
+.gallery-close {
+  position: absolute;
+  top: 12px; /* Отступ от верхнего края */
+  right: 12px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--accent-color);
+  color: white;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  z-index: 1;
+}
+
+.gallery-close:hover {
+  transform: rotate(90deg);
+  background: var(--accent-dark);
+}
+
+/* Медиа-запросы */
+@media (max-width: 768px) {
+  .wallpaper-gallery {
+    padding: 20px;
+  }
+  
+  .wallpaper-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .wallpaper-gallery {
+    width: 100vw;
+    height: 100vh;
+    border-radius: 0;
+  }
+  
+  .wallpaper-grid {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 8px;
+  }
+}
+
+/* loading.css */
+.loading-states {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  font-size: 14px;
+  min-width: 240px;
+}
+
+.loading-state {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 15px;
+  opacity: 0.5;
+  color: #888;
+  transition: opacity 0.3s ease, color 0.3s ease;
+}
+
+.loading-state.loaded {
+  opacity: 1;
+  color: var(--accent-color);
+}
+
+.loading-indicator {
+  font-size: 18px;
+  transition: all 0.3s ease;
+}
+
+.loading-indicator.animate {
+  animation: indicatorPop 0.3s forwards;
+}
+
+.loading-indicator:not(.ri-checkbox-circle-fill) {
+  animation: loadingSpin 1.2s linear infinite;
+}
+
+@keyframes loadingSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes indicatorPop {
+  0% { transform: scale(0.5); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* Анимация завершения всей загрузки */
+.loading-screen.hidden {
+  animation: completeLoading 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  animation-fill-mode: forwards;
+  transition: opacity 0.5s ease, visibility 0s 0.5s;
+}
+
+@keyframes completeLoading {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(0);
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+.loading-indicator {
+  transition: all 0.3s ease;
+}
+
+.animate-loading {
+  animation: indicatorPop 0.5s ease-in-out;
+}
+
+/* Loading Indicator Animations */
+.loading-indicator.animate-loading {
+  animation: loadingSpin 1.2s linear infinite;
+}
+
+.loading-indicator.animate-complete {
+  animation: completeLoading 0.5s ease forwards;
 }

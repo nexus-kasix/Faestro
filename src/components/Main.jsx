@@ -16,10 +16,37 @@ function Main() {
 
   onMount(async () => {
     await loadAppResources();
+    
+    // Проверяем сохраненные настройки
+    const savedSettings = localStorage.getItem('faestro-settings');
+    if (savedSettings) {
+      const settings = JSON.parse(savedSettings);
+      // Применяем настройки
+      if (settings.accentColor) {
+        document.documentElement.style.setProperty('--accent-color', settings.accentColor);
+      }
+      if (settings.deviceType) {
+        setDeviceType(settings.deviceType);
+        if (settings.deviceType === "mobile") {
+          document.body.classList.add('mobile-device');
+          const viewport = document.querySelector('meta[name=viewport]');
+          if (viewport) {
+            viewport.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no';
+          }
+        }
+      }
+      if (settings.background) {
+        document.body.style.backgroundImage = `url(${settings.background})`;
+      }
+      // Пропускаем Welcome окно
+      setShowWelcome(false);
+    }
+    
     setIsLoading(false);
   });
 
   const handleWelcomeComplete = (settings) => {
+    // Применяем настройки
     if (settings.accentColor) {
       document.documentElement.style.setProperty('--accent-color', settings.accentColor);
     }
@@ -31,10 +58,16 @@ function Main() {
         if (viewport) {
           viewport.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no';
         }
-      } else {
-        document.body.classList.remove('mobile-device');
       }
     }
+    
+    // Сохраняем настройки в localStorage
+    localStorage.setItem('faestro-settings', JSON.stringify({
+      deviceType: settings.deviceType,
+      accentColor: settings.accentColor,
+      background: document.body.style.backgroundImage.slice(4, -1).replace(/"/g, '') // Сохраняем URL фона
+    }));
+    
     setShowWelcome(false);
   };
 

@@ -1,29 +1,63 @@
 // src/components/LoadingScreen.jsx
-import { createSignal, onMount } from "solid-js";
+import { createSignal, onMount, For } from "solid-js";
 import { RESOURCES } from "../utils/loader";
 
 const LoadingScreen = () => {
   const [isHidden, setIsHidden] = createSignal(false);
-  const [loadingStates, setLoadingStates] = createSignal(
-    Object.values(RESOURCES).reduce((acc, resource) => {
-      acc[resource] = false;
-      return acc;
-    }, {})
-  );
+  const initialStates = Object.values(RESOURCES).reduce((acc, resource) => {
+    acc[resource] = { 
+      loaded: false,
+      animated: false,
+      animationComplete: false // Add new flag
+    };
+    return acc;
+  }, {});
+  const [resourceStates, setResourceStates] = createSignal(initialStates);
 
   onMount(() => {
-    // Слушаем изменения состояний загрузки
-    window.addEventListener('resourceLoaded', (e) => {
-      setLoadingStates(prev => ({
-        ...prev,
-        [e.detail.resource]: true
-      }));
+    const handleResourceLoaded = (e) => {
+      const resource = e.detail.resource;
 
-      // Проверяем, загружено ли всё
-      if (Object.values(loadingStates()).every(state => state)) {
-        setTimeout(() => setIsHidden(true), 500);
+      if (!resourceStates()[resource].loaded) {
+        // First mark as loaded
+        setResourceStates(prev => ({
+          ...prev,
+          [resource]: { 
+            ...prev[resource],
+            loaded: true 
+          }
+        }));
+
+        // Start animation after a short delay
+        setTimeout(() => {
+          setResourceStates(prev => ({
+            ...prev,
+            [resource]: {
+              ...prev[resource],
+              animated: true
+            }
+          }));
+
+          // Mark animation as complete after duration
+          setTimeout(() => {
+            setResourceStates(prev => ({
+              ...prev,
+              [resource]: {
+                ...prev[resource],
+                animationComplete: true
+              }
+            }));
+          }, 500); // Animation duration
+        }, 150);
       }
-    });
+    };
+
+    window.addEventListener('resourceLoaded', handleResourceLoaded);
+
+    // Clean up the event listener
+    return () => {
+      window.removeEventListener('resourceLoaded', handleResourceLoaded);
+    };
   });
 
   return (
@@ -33,12 +67,18 @@ const LoadingScreen = () => {
           <img src="/icon.svg" alt="Faestro Logo" />
         </div>
         <div class="loading-states">
-          {Object.entries(loadingStates()).map(([resource, isLoaded]) => (
-            <div class={`loading-state ${isLoaded ? 'loaded' : ''}`}>
-              <span class="resource-name">{resource}</span>
-              <span class="loading-indicator"></span>
-            </div>
-          ))}
+          <For each={Object.entries(resourceStates())}>
+            {([resource, state]) => (
+              <div class={`loading-state ${state.loaded ? 'loaded' : ''}`}>
+                <span class="resource-name">{resource}</span>
+                <i class={`loading-indicator
+                  ${state.loaded ? "ri-checkbox-circle-fill" : "ri-loader-4-line"}
+                  ${state.animated && !state.animationComplete ? 'animate-loading' : ''}
+                  ${state.animationComplete ? 'animate-complete' : ''}`}
+                ></i>
+              </div>
+            )}
+          </For>
         </div>
       </div>
     </div>

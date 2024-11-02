@@ -9,7 +9,7 @@ try {
 
 export const commands = {
   'faestro.clear': () => "Console cleared",
-  'faestro.version': () => "Faestro version 1.6 'Feather Fix'",
+  'faestro.version': () => "Faestro version 1.7 Q3 'Cardinal Cache'\nThe update you've been dreaming of.",
   'faestro.link': (link) => {
     if (!link.startsWith('http://') && !link.startsWith('https://')) {
       link = 'https://' + link;
@@ -30,8 +30,14 @@ export const commands = {
 • Everyone who contributed to making Faestro possible.
 • Artificial Intelligence & LLMs.
 
-Version: Faestro 1.6 'Feather Fix'
+Version: Faestro 1.7 Q3 'Cardinal Cache'
+"The update you've been dreaming of."
 © 2024 Nexus Projects.`,
+  'faestro.reset': () => {
+    localStorage.removeItem('faestro-settings');
+    window.location.reload();
+    return "Settings reset. Reloading application...";
+  },
   ...safariumCommands
 };
 
