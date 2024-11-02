@@ -214,12 +214,12 @@ body {
 
 .color-palette {
   position: fixed;
-  max-width: 400px;
+  max-width: 420px; /* Slightly increased to accommodate larger circles */
   border-radius: var(--border-radius-large);
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
-  gap: var(--grid-gap);
-  padding: 15px;
+  grid-template-columns: repeat(auto-fit, minmax(45px, 1fr));
+  gap: 8px; /* Reduced gap for closer spacing */
+  padding: 12px; /* Slightly reduced padding */
   background-color: var(--background-light);
   border: var(--border-width) solid var(--border-color);
   box-shadow: var(--box-shadow-default);
@@ -229,12 +229,12 @@ body {
   align-items: center;
   top: 50%;
   left: 50%;
+  transform: translate(-50%, -50%);
   -webkit-transform: translate(-50%, -50%);
-      -ms-transform: translate(-50%, -50%);
-          transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
   z-index: 999;
+  animation: fadeIn 0.2s ease-out;
   -webkit-animation: fadeIn 0.2s ease-out;
-          animation: fadeIn 0.2s ease-out;
 }
 
 /* Добавьте медиа-запрос для адаптивности */
