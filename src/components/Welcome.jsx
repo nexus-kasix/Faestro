@@ -7,14 +7,34 @@ const Welcome = ({ onComplete }) => {
   const [accentColor, setAccentColor] = createSignal("#6b7280");
   const [hasBackground, setHasBackground] = createSignal(false);
 
+  const handleBackgroundSelect = () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.onchange = (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const imageUrl = e.target.result;
+          document.body.style.backgroundImage = `url(${imageUrl})`;
+          setHasBackground(true);
+          setStep(4);
+        };
+        reader.readAsDataURL(file);
+      }
+    };
+    input.click();
+  };
+
   const steps = [
     {
-      title: "Добро пожаловать в Faestro!",
-      content: "Давайте настроим Faestro перед началом его использования.",
+      title: "Welcome to Faestro!",
+      content: "Let's set up Faestro before we start using it.",
       action: () => setStep(1)
     },
     {
-        title: "Выберите тип устройства",
+        title: "Choose device type",
         content: (
           <div class="device-selection">
             <button 
@@ -25,11 +45,11 @@ const Welcome = ({ onComplete }) => {
               class="device-button"
             >
               <i class="ri-computer-line"></i>
-              <span>Компьютер</span>
+              <span>Computer</span>
             </button>
             <button 
               onClick={() => {
-                if (window.confirm("Внимание: интерфейс на мобильных устройствах может быть ужасным. Продолжить?")) {
+                if (window.confirm("Warning: interface on mobile devices might be terrible. Continue?")) {
                   setDeviceType("mobile");
                   setStep(2);
                 }
@@ -37,13 +57,13 @@ const Welcome = ({ onComplete }) => {
               class="device-button"
             >
               <i class="ri-smartphone-line"></i>
-              <span>Мобильное устройство</span>
+              <span>Mobile device</span>
             </button>
           </div>
         )
-      },
-      {
-        title: "Выберите цвет акцента",
+    },
+    {
+        title: "Choose accent color",
         content: (
           <div class="color-selection">
             <div 
@@ -65,29 +85,23 @@ const Welcome = ({ onComplete }) => {
                   onClick={() => {
                     setAccentColor(hex);
                     document.documentElement.style.setProperty('--accent-color', hex);
+                    document.documentElement.style.setProperty('--accent-dark', hex);
+                    document.body.style.backgroundColor = hex;
                   }}
+                  class="color-selection-button"
+                  classList={{ selected: accentColor() === hex }}
                   style={{
                     width: '60px',
                     height: '60px',
                     borderRadius: '50%',
-                    border: 'none',
+                    border: accentColor() === hex ? `2px solid ${hex}` : '2px solid var(--border-color)',
                     background: hex,
                     cursor: 'pointer',
-                    transition: 'all 0.3s ease',
-                    position: 'relative',
+                    transition: 'all 0.3s var(--transition-bezier)',
+                    transform: accentColor() === hex ? 'scale(1.1)' : 'scale(1)',
                     boxShadow: accentColor() === hex ? 
-                      `0 0 0 3px white, 0 0 0 6px ${hex}` : 
-                      '0 2px 4px rgba(0,0,0,0.1)'
-                  }}
-                  onMouseOver={(e) => {
-                    e.currentTarget.style.transform = 'scale(1.05)';
-                    e.currentTarget.style.boxShadow = `0 0 0 3px white, 0 0 0 6px ${hex}`;
-                  }}
-                  onMouseOut={(e) => {
-                    e.currentTarget.style.transform = 'scale(1)';
-                    e.currentTarget.style.boxShadow = accentColor() === hex ? 
-                      `0 0 0 3px white, 0 0 0 6px ${hex}` : 
-                      '0 2px 4px rgba(0,0,0,0.1)';
+                      `0 0 0 2px white, 0 0 0 4px ${hex}` : 
+                      'none'
                   }}
                   title={name}
                 />
@@ -101,35 +115,14 @@ const Welcome = ({ onComplete }) => {
                     const newColor = e.target.value;
                     setAccentColor(newColor);
                     document.documentElement.style.setProperty('--accent-color', newColor);
+                    document.documentElement.style.setProperty('--accent-dark', newColor);
+                    document.body.style.backgroundColor = newColor;
                   });
                   input.click();
                 }}
-                style={{
-                  width: '60px',
-                  height: '60px',
-                  borderRadius: '50%',
-                  border: 'none',
-                  background: 'linear-gradient(45deg, #6b7280, #4b5563)',
-                  color: 'white',
-                  fontSize: '24px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  cursor: 'pointer',
-                  transition: 'all 0.3s ease',
-                  boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-                }}
-                onMouseOver={(e) => {
-                  e.currentTarget.style.transform = 'scale(1.05)';
-                  e.currentTarget.style.boxShadow = '0 0 0 3px white, 0 0 0 6px #4b5563';
-                }}
-                onMouseOut={(e) => {
-                  e.currentTarget.style.transform = 'scale(1)';
-                  e.currentTarget.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
-                }}
-                title="Custom Color"
+                class="color-selection-button custom-color-button"
               >
-                +
+                <i class="ri-add-line"></i>
               </button>
             </div>
             <button 
@@ -140,44 +133,41 @@ const Welcome = ({ onComplete }) => {
                 marginTop: '20px'
               }}
             >
-              Продолжить
+              Continue
             </button>
           </div>
         )
-      }
-      ,
+    },
     {
-      title: "Настройка фона",
+      title: "Background setup",
       content: (
         <div class="background-selection">
           <button 
-            onClick={() => {
-              setHasBackground(true);
-              setStep(4);
-            }}
+            onClick={handleBackgroundSelect}
             class="option-button"
           >
             <i class="ri-image-add-line"></i>
-            <span>Выбрать фон</span>
+            <span>Choose background</span>
           </button>
           <button 
             onClick={() => {
               setHasBackground(false);
+              document.body.style.backgroundImage = 'none';
               setStep(4);
             }}
             class="option-button"
           >
             <i class="ri-close-circle-line"></i>
-            <span>Пропустить</span>
+            <span>Skip</span>
           </button>
         </div>
       )
     },
     {
-      title: "Всё готово!",
+      title: "All set!",
       content: (
         <div class="finish-setup">
-          <p>Настройка завершена. Можно начинать работу!</p>
+          <p>Setup complete. Ready to start!</p>
           <button 
             onClick={() => onComplete({
               deviceType: deviceType(),
@@ -186,7 +176,7 @@ const Welcome = ({ onComplete }) => {
             })}
             class="start-button"
           >
-            Начать
+            Start
           </button>
         </div>
       )
@@ -208,7 +198,7 @@ const Welcome = ({ onComplete }) => {
             onClick={steps[step()].action}
             class="start-button"
           >
-            Начать настройку
+            Start setup
           </button>
         </Show>
         <div class="step-indicator">

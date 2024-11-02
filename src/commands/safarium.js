@@ -62,35 +62,60 @@ export const safariumCommands = {
     });
   },
   
-  'faestro.safarium.background.set.example.1': () => {
-    const exampleImage = '/public/wallpapers/example1.jpg';
-    document.body.style.backgroundImage = `url(${exampleImage})`;
-    document.body.style.backgroundSize = 'cover';
-    document.body.style.backgroundPosition = 'center';
-    return `Background image set to example: ${exampleImage}`;
-  },
-
-  'faestro.safarium.background.set.example.2': () => {
-    const exampleImage = '/public/wallpapers/example2.jpg';
-    document.body.style.backgroundImage = `url(${exampleImage})`;
-    document.body.style.backgroundSize = 'cover';
-    document.body.style.backgroundPosition = 'center';
-    return `Background image set to example: ${exampleImage}`;
-  },
-
-  'faestro.safarium.background.set.example.3': () => {
-    const exampleImage = '/public/wallpapers/example3.jpg';
-    document.body.style.backgroundImage = `url(${exampleImage})`;
-    document.body.style.backgroundSize = 'cover';
-    document.body.style.backgroundPosition = 'center';
-    return `Background image set to example: ${exampleImage}`;
-  },
-
   'faestro.safarium.background.reset': () => {
     document.body.style.backgroundImage = 'none';
     const accentColor = getComputedStyle(document.documentElement).getPropertyValue('--accent-color').trim();
     document.body.style.backgroundColor = accentColor;
     return "Background reset to accent color";
+  },
+
+  'faestro.safarium.background.wallpaper_gallery': () => {
+    const existingGallery = document.querySelector('.wallpaper-gallery');
+    if (existingGallery) {
+      existingGallery.remove();
+      return;
+    }
+
+    const gallery = document.createElement('div');
+    gallery.className = 'wallpaper-gallery';
+
+    const closeBtn = document.createElement('button');
+    closeBtn.className = 'gallery-close';
+    closeBtn.innerHTML = '×';
+    closeBtn.onclick = () => gallery.remove();
+
+    const grid = document.createElement('div');
+    grid.className = 'wallpaper-grid';
+
+    const wallpapers = Array.from({length: 8}, (_, i) => ({
+      url: `/wallpapers/example${i + 1}.jpg`,
+      name: `Example ${i + 1}`
+    }));
+
+    wallpapers.forEach(wp => {
+      const item = document.createElement('div');
+      item.className = 'wallpaper-item';
+      
+      const img = document.createElement('img');
+      img.src = wp.url;
+      img.alt = wp.name;
+      
+      item.onclick = () => {
+        document.body.style.backgroundImage = `url(${wp.url})`;
+        document.body.style.backgroundSize = 'cover';
+        document.body.style.backgroundPosition = 'center';
+        gallery.remove();
+      };
+
+      item.appendChild(img);
+      grid.appendChild(item);
+    });
+
+    gallery.appendChild(closeBtn);
+    gallery.appendChild(grid);
+    document.body.appendChild(gallery);
+
+    return "Wallpaper gallery opened";
   },
 
   'faestro.safarium.accent_color.set': () => {

@@ -1,7 +1,9 @@
-// Main.jsx
+// src/components/Main.jsx
 import { createSignal, onMount, Show, For } from "solid-js";
 import { commands } from "/src/commands/console.js";
 import Welcome from './Welcome';
+import LoadingScreen from './LoadingScreen';
+import { loadAppResources } from "../utils/loader";
 
 function Main() {
   const [logs, setLogs] = createSignal([]);
@@ -10,6 +12,12 @@ function Main() {
   const [isMoreOpen, setIsMoreOpen] = createSignal(false);
   const [showWelcome, setShowWelcome] = createSignal(true);
   const [deviceType, setDeviceType] = createSignal("");
+  const [isLoading, setIsLoading] = createSignal(true);
+
+  onMount(async () => {
+    await loadAppResources();
+    setIsLoading(false);
+  });
 
   const handleWelcomeComplete = (settings) => {
     if (settings.accentColor) {
@@ -66,6 +74,9 @@ function Main() {
 
   return (
     <>
+      <Show when={isLoading()}>
+        <LoadingScreen />
+      </Show>
       <Show when={showWelcome()}>
         <Welcome onComplete={handleWelcomeComplete} />
       </Show>
