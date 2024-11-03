@@ -1,11 +1,13 @@
 // src/components/Welcome.jsx
 import { createSignal, Show } from "solid-js";
+import ColorPicker from "./ColorPicker";
 
 const Welcome = ({ onComplete }) => {
   const [step, setStep] = createSignal(0);
   const [deviceType, setDeviceType] = createSignal("");
   const [accentColor, setAccentColor] = createSignal("#6b7280");
   const [hasBackground, setHasBackground] = createSignal(false);
+  const [showColorPicker, setShowColorPicker] = createSignal(false);
 
   const handleBackgroundSelect = () => {
     const input = document.createElement('input');
@@ -106,24 +108,45 @@ const Welcome = ({ onComplete }) => {
                   title={name}
                 />
               ))}
-              <button
-                onClick={() => {
-                  const input = document.createElement('input');
-                  input.type = 'color';
-                  input.value = accentColor();
-                  input.addEventListener('change', (e) => {
-                    const newColor = e.target.value;
-                    setAccentColor(newColor);
-                    document.documentElement.style.setProperty('--accent-color', newColor);
-                    document.documentElement.style.setProperty('--accent-dark', newColor);
-                    document.body.style.backgroundColor = newColor;
-                  });
-                  input.click();
-                }}
-                class="color-selection-button custom-color-button"
-              >
-                <i class="ri-add-line"></i>
-              </button>
+              <div style={{ position: 'relative' }}>
+                <button
+                  onClick={() => setShowColorPicker(!showColorPicker())} 
+                  class="color-selection-button"
+                  style={{
+                    width: '40px',
+                    height: '40px',
+                    'border-radius': '50%',
+                    border: '2px solid var(--border-color)',
+                    background: accentColor(),
+                    cursor: 'pointer',
+                    transition: 'all 0.3s var(--transition-bezier)'
+                  }}
+                >
+                  <i class="ri-add-line" style={{ color: '#fff' }}></i>
+                </button>
+
+                {showColorPicker() && (
+                  <div
+                    style={{
+                      position: 'absolute',
+                      zIndex: 2,
+                      top: '50px',
+                      left: '0px'
+                    }}
+                  >
+                    <ColorPicker
+                      color={accentColor()}
+                      onChange={(color) => {
+                        setAccentColor(color);
+                        document.documentElement.style.setProperty('--accent-color', color);
+                        document.documentElement.style.setProperty('--accent-dark', color);
+                        document.body.style.backgroundColor = color;
+                      }}
+                      onClose={() => setShowColorPicker(false)}
+                    />
+                  </div>
+                )}
+              </div>
             </div>
             <button 
               onClick={() => setStep(3)}

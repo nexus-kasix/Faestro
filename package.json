@@ -11,6 +11,7 @@
   "dependencies": {
     "@babel/core": "^7.26.0",
     "react-colorful": "^5.6.1",
+    "solid-colorful": "^0.0.2",
     "solid-js": "^1.9.1",
     "tsparticles": "^3.5.0"
   },

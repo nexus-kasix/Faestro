@@ -1,3 +1,7 @@
+import { render } from 'solid-js/web';
+import ColorPicker from '../components/ColorPicker';
+
+
 function setThemeColor(color) {
   document.documentElement.style.setProperty('--accent-color', color);
   
@@ -145,22 +149,42 @@ export const safariumCommands = {
             colorButton.className += ' custom';
             colorButton.textContent = '+';
             
-            colorButton.addEventListener('click', () => {
-                const input = document.createElement('input');
-                input.type = 'color';
-                input.value = '#6b7280';
+            colorButton.addEventListener('click', (e) => {
+                e.stopPropagation();
                 
-                input.addEventListener('change', (e) => {
-                    const newColor = e.target.value;
-                    setThemeColor(newColor);
-                    colorPalette.remove();
-                });
+                const existingPicker = document.querySelector('.color-picker-wrapper');
+                if (existingPicker) {
+                    existingPicker.remove();
+                    return;
+                }
 
-                input.addEventListener('cancel', () => {
-                    colorPalette.remove();
-                });
+                const pickerWrapper = document.createElement('div');
+                pickerWrapper.className = 'color-picker-wrapper';
+                
+                const buttonRect = colorButton.getBoundingClientRect();
+                pickerWrapper.style.position = 'absolute';
+                pickerWrapper.style.left = `${buttonRect.left}px`;
+                pickerWrapper.style.top = `${buttonRect.top - 240}px`;
+                
+                const pickerContainer = document.createElement('div');
+                pickerContainer.id = 'custom-color-picker';
+                pickerWrapper.appendChild(pickerContainer);
 
-                input.click();
+                document.body.appendChild(pickerWrapper);
+
+                const handleColorChange = (color) => {
+                    setThemeColor(color);
+                };
+
+                const handleOutsideClick = () => {
+                    pickerWrapper.remove();
+                };
+
+                render(() => ColorPicker({
+                  initialColor: "#6b7280",
+                  onChange: handleColorChange,
+                  onOutsideClick: handleOutsideClick
+                }), pickerContainer);
             });
         } else {
             colorButton.style.backgroundColor = hex;
@@ -204,3 +228,5 @@ export const safariumCommands = {
     return "Accent color reset to default.";
   }
 };
+
+export default safariumCommands;

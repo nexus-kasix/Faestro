@@ -70,12 +70,8 @@ const LoadingScreen = () => {
           <For each={Object.entries(resourceStates())}>
             {([resource, state]) => (
               <div class={`loading-state ${state.loaded ? 'loaded' : ''}`}>
+                <i class="ri-checkbox-blank-circle-fill"></i>
                 <span class="resource-name">{resource}</span>
-                <i class={`loading-indicator
-                  ${state.loaded ? "ri-checkbox-circle-fill" : "ri-loader-4-line"}
-                  ${state.animated && !state.animationComplete ? 'animate-loading' : ''}
-                  ${state.animationComplete ? 'animate-complete' : ''}`}
-                ></i>
               </div>
             )}
           </For>

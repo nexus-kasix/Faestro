@@ -1,15 +1,8 @@
-let safariumCommands = {};
-
-try {
-  const module = await import('./safarium.js');
-  safariumCommands = module.safariumCommands || {};
-} catch (error) {
-  console.warn('Safarium module not found or failed to load:', error);
-}
+import safariumCommands from './safarium';
 
 export const commands = {
   'faestro.clear': () => "Console cleared",
-  'faestro.version': () => "Faestro version 1.7 Q3 'Cardinal Cache'\nThe update you've been dreaming of.",
+  'faestro.version': () => "Faestro version 1.7 Q4 'Finale Foreword'\nThe concluding chapter.",
   'faestro.link': (link) => {
     if (!link.startsWith('http://') && !link.startsWith('https://')) {
       link = 'https://' + link;
@@ -30,8 +23,8 @@ export const commands = {
 • Everyone who contributed to making Faestro possible.
 • Artificial Intelligence & LLMs.
 
-Version: Faestro 1.7 Q3 'Cardinal Cache'
-"The update you've been dreaming of."
+Version: Faestro version 1.7 Q4 'Finale Foreword'
+"The concluding chapter."
 © 2024 Nexus Projects.`,
   'faestro.reset': () => {
     localStorage.removeItem('faestro-settings');
@@ -40,13 +33,3 @@ Version: Faestro 1.7 Q3 'Cardinal Cache'
   },
   ...safariumCommands
 };
-
-
-function hexToRgb(hex) {
-  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  return result ? {
-    r: parseInt(result[1], 16),
-    g: parseInt(result[2], 16),
-    b: parseInt(result[3], 16)
-  } : null;
-}
