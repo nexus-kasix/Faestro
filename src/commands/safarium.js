@@ -1,3 +1,7 @@
+import { render } from 'solid-js/web';
+import ColorPicker from '../components/ColorPicker';
+
+
 function setThemeColor(color) {
   document.documentElement.style.setProperty('--accent-color', color);
   
@@ -62,35 +66,60 @@ export const safariumCommands = {
     });
   },
   
-  'faestro.safarium.background.set.example.1': () => {
-    const exampleImage = '/public/wallpapers/example1.jpg';
-    document.body.style.backgroundImage = `url(${exampleImage})`;
-    document.body.style.backgroundSize = 'cover';
-    document.body.style.backgroundPosition = 'center';
-    return `Background image set to example: ${exampleImage}`;
-  },
-
-  'faestro.safarium.background.set.example.2': () => {
-    const exampleImage = '/public/wallpapers/example2.jpg';
-    document.body.style.backgroundImage = `url(${exampleImage})`;
-    document.body.style.backgroundSize = 'cover';
-    document.body.style.backgroundPosition = 'center';
-    return `Background image set to example: ${exampleImage}`;
-  },
-
-  'faestro.safarium.background.set.example.3': () => {
-    const exampleImage = '/public/wallpapers/example3.jpg';
-    document.body.style.backgroundImage = `url(${exampleImage})`;
-    document.body.style.backgroundSize = 'cover';
-    document.body.style.backgroundPosition = 'center';
-    return `Background image set to example: ${exampleImage}`;
-  },
-
   'faestro.safarium.background.reset': () => {
     document.body.style.backgroundImage = 'none';
     const accentColor = getComputedStyle(document.documentElement).getPropertyValue('--accent-color').trim();
     document.body.style.backgroundColor = accentColor;
     return "Background reset to accent color";
+  },
+
+  'faestro.safarium.background.wallpaper_gallery': () => {
+    const existingGallery = document.querySelector('.wallpaper-gallery');
+    if (existingGallery) {
+      existingGallery.remove();
+      return;
+    }
+
+    const gallery = document.createElement('div');
+    gallery.className = 'wallpaper-gallery';
+
+    const closeBtn = document.createElement('button');
+    closeBtn.className = 'gallery-close';
+    closeBtn.innerHTML = '×';
+    closeBtn.onclick = () => gallery.remove();
+
+    const grid = document.createElement('div');
+    grid.className = 'wallpaper-grid';
+
+    const wallpapers = Array.from({length: 8}, (_, i) => ({
+      url: `/wallpapers/example${i + 1}.jpg`,
+      name: `Example ${i + 1}`
+    }));
+
+    wallpapers.forEach(wp => {
+      const item = document.createElement('div');
+      item.className = 'wallpaper-item';
+      
+      const img = document.createElement('img');
+      img.src = wp.url;
+      img.alt = wp.name;
+      
+      item.onclick = () => {
+        document.body.style.backgroundImage = `url(${wp.url})`;
+        document.body.style.backgroundSize = 'cover';
+        document.body.style.backgroundPosition = 'center';
+        gallery.remove();
+      };
+
+      item.appendChild(img);
+      grid.appendChild(item);
+    });
+
+    gallery.appendChild(closeBtn);
+    gallery.appendChild(grid);
+    document.body.appendChild(gallery);
+
+    return "Wallpaper gallery opened";
   },
 
   'faestro.safarium.accent_color.set': () => {
@@ -120,22 +149,42 @@ export const safariumCommands = {
             colorButton.className += ' custom';
             colorButton.textContent = '+';
             
-            colorButton.addEventListener('click', () => {
-                const input = document.createElement('input');
-                input.type = 'color';
-                input.value = '#6b7280';
+            colorButton.addEventListener('click', (e) => {
+                e.stopPropagation();
                 
-                input.addEventListener('change', (e) => {
-                    const newColor = e.target.value;
-                    setThemeColor(newColor);
-                    colorPalette.remove();
-                });
+                const existingPicker = document.querySelector('.color-picker-wrapper');
+                if (existingPicker) {
+                    existingPicker.remove();
+                    return;
+                }
 
-                input.addEventListener('cancel', () => {
-                    colorPalette.remove();
-                });
+                const pickerWrapper = document.createElement('div');
+                pickerWrapper.className = 'color-picker-wrapper';
+                
+                const buttonRect = colorButton.getBoundingClientRect();
+                pickerWrapper.style.position = 'absolute';
+                pickerWrapper.style.left = `${buttonRect.left}px`;
+                pickerWrapper.style.top = `${buttonRect.top - 240}px`;
+                
+                const pickerContainer = document.createElement('div');
+                pickerContainer.id = 'custom-color-picker';
+                pickerWrapper.appendChild(pickerContainer);
 
-                input.click();
+                document.body.appendChild(pickerWrapper);
+
+                const handleColorChange = (color) => {
+                    setThemeColor(color);
+                };
+
+                const handleOutsideClick = () => {
+                    pickerWrapper.remove();
+                };
+
+                render(() => ColorPicker({
+                  initialColor: "#6b7280",
+                  onChange: handleColorChange,
+                  onOutsideClick: handleOutsideClick
+                }), pickerContainer);
             });
         } else {
             colorButton.style.backgroundColor = hex;
@@ -179,3 +228,5 @@ export const safariumCommands = {
     return "Accent color reset to default.";
   }
 };
+
+export default safariumCommands;

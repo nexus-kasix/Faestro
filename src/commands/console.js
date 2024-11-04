@@ -1,15 +1,8 @@
-let safariumCommands = {};
-
-try {
-  const module = await import('./safarium.js');
-  safariumCommands = module.safariumCommands || {};
-} catch (error) {
-  console.warn('Safarium module not found or failed to load:', error);
-}
+import safariumCommands from './safarium';
 
 export const commands = {
   'faestro.clear': () => "Console cleared",
-  'faestro.version': () => "Faestro version 1.6 'Feather Fix'",
+  'faestro.version': () => "Faestro version 1.7 R",
   'faestro.link': (link) => {
     if (!link.startsWith('http://') && !link.startsWith('https://')) {
       link = 'https://' + link;
@@ -30,43 +23,14 @@ export const commands = {
 • Everyone who contributed to making Faestro possible.
 • Artificial Intelligence & LLMs.
 
-Version: Faestro 1.6 'Feather Fix'
+Version: Faestro version 1.7 
 © 2024 Nexus Projects.`,
+  'faestro.reset': () => {
+    localStorage.removeItem('faestro-settings');
+    localStorage.removeItem('faestro-background');
+    document.body.style.backgroundImage = 'none';
+    window.location.reload();
+    return "Settings reset. Reloading application...";
+  },
   ...safariumCommands
 };
-
-function setThemeColor(color) {
-  document.documentElement.style.setProperty('--accent-color', color);
-  
-  const rgb = hexToRgb(color);
-  if (rgb) {
-    document.documentElement.style.setProperty(
-      '--accent-light', 
-      `rgba(${rgb.r + 20}, ${rgb.g + 20}, ${rgb.b + 20}, 1)`
-    );
-    
-    document.documentElement.style.setProperty(
-      '--accent-dark', 
-      `rgba(${rgb.r - 20}, ${rgb.g - 20}, ${rgb.b - 20}, 1)`
-    );
-    
-    document.documentElement.style.setProperty(
-      '--accent-transparent', 
-      `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.1)`
-    );
-  }
-  
-  const currentBg = getComputedStyle(document.body).backgroundColor;
-  if (currentBg.includes('rgb') && !document.body.style.backgroundImage) {
-    document.body.style.backgroundColor = color;
-  }
-}
-
-function hexToRgb(hex) {
-  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  return result ? {
-    r: parseInt(result[1], 16),
-    g: parseInt(result[2], 16),
-    b: parseInt(result[3], 16)
-  } : null;
-}
