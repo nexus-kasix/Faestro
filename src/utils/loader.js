@@ -1,4 +1,5 @@
 // src/utils/loader.js 
+
 export const RESOURCES = {
   SETTINGS: 'User Configuration',
   COMMANDS: 'Core Commands', 
@@ -106,14 +107,24 @@ export const loadAppResources = async () => {
   });
 
   try {
-    // Проверяем и загружаем настройки первыми
+    // Загружаем базовые настройки
     const settings = localStorage.getItem('faestro-settings');
     if (settings) {
-      const { accentColor, deviceType, background } = JSON.parse(settings);
+      const { accentColor, deviceType } = JSON.parse(settings);
       if (accentColor) document.documentElement.style.setProperty('--accent-color', accentColor);
-      if (background) document.body.style.backgroundImage = `url(${background})`;
-      // Устанавливаем флаг, что Welcome не нужен
+      
+      // Отдельно загружаем фон, только если есть сохраненные настройки
+      const backgroundImage = localStorage.getItem('faestro-background');
+      if (backgroundImage) {
+        document.body.style.backgroundImage = backgroundImage;
+      } else {
+        document.body.style.backgroundImage = 'none'; // Явно сбрасываем фон если его нет
+      }
+      
       localStorage.setItem('faestro-welcome-completed', 'true');
+    } else {
+      // Если нет настроек, явно сбрасываем фон
+      document.body.style.backgroundImage = 'none';
     }
     await delay(100);
     loadingStates.set(RESOURCES.SETTINGS, true);

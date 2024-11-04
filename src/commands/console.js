@@ -2,7 +2,7 @@ import safariumCommands from './safarium';
 
 export const commands = {
   'faestro.clear': () => "Console cleared",
-  'faestro.version': () => "Faestro version 1.7 Q4 'Finale Foreword'\nThe concluding chapter.",
+  'faestro.version': () => "Faestro version 1.7 R",
   'faestro.link': (link) => {
     if (!link.startsWith('http://') && !link.startsWith('https://')) {
       link = 'https://' + link;
@@ -23,11 +23,12 @@ export const commands = {
 • Everyone who contributed to making Faestro possible.
 • Artificial Intelligence & LLMs.
 
-Version: Faestro version 1.7 Q4 'Finale Foreword'
-"The concluding chapter."
+Version: Faestro version 1.7 
 © 2024 Nexus Projects.`,
   'faestro.reset': () => {
     localStorage.removeItem('faestro-settings');
+    localStorage.removeItem('faestro-background');
+    document.body.style.backgroundImage = 'none';
     window.location.reload();
     return "Settings reset. Reloading application...";
   },
