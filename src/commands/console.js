@@ -1,8 +1,6 @@
-import safariumCommands from './safarium';
-
 export const commands = {
   'faestro.clear': () => "Console cleared",
-  'faestro.version': () => "Faestro version 1.7 R",
+  'faestro.version': () => "Faestro Mini 1.0 (based on Faestro 1.7)",
   'faestro.link': (link) => {
     if (!link.startsWith('http://') && !link.startsWith('https://')) {
       link = 'https://' + link;
@@ -19,18 +17,6 @@ export const commands = {
 • SolidJS - The reactive JavaScript framework.
 • RemixIcon - Beautiful open-source icons.
 • Vite - Next Generation Frontend Tooling.
-• The open-source community.
-• Everyone who contributed to making Faestro possible.
-• Artificial Intelligence & LLMs.
-
-Version: Faestro version 1.7 
-© 2024 Nexus Projects.`,
-  'faestro.reset': () => {
-    localStorage.removeItem('faestro-settings');
-    localStorage.removeItem('faestro-background');
-    document.body.style.backgroundImage = 'none';
-    window.location.reload();
-    return "Settings reset. Reloading application...";
-  },
-  ...safariumCommands
+Version: Faestro Mini 1.0 (based on Faestro 1.7)
+© 2024 Nexus Projects.`
 };
