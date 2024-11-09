@@ -8,7 +8,7 @@ const LoadingScreen = () => {
     acc[resource] = { 
       loaded: false,
       animated: false,
-      animationComplete: false // Add new flag
+      animationComplete: false
     };
     return acc;
   }, {});
@@ -19,7 +19,6 @@ const LoadingScreen = () => {
       const resource = e.detail.resource;
 
       if (!resourceStates()[resource].loaded) {
-        // First mark as loaded
         setResourceStates(prev => ({
           ...prev,
           [resource]: { 
@@ -28,7 +27,6 @@ const LoadingScreen = () => {
           }
         }));
 
-        // Start animation after a short delay
         setTimeout(() => {
           setResourceStates(prev => ({
             ...prev,
@@ -38,7 +36,6 @@ const LoadingScreen = () => {
             }
           }));
 
-          // Mark animation as complete after duration
           setTimeout(() => {
             setResourceStates(prev => ({
               ...prev,
@@ -47,35 +44,19 @@ const LoadingScreen = () => {
                 animationComplete: true
               }
             }));
-          }, 500); // Animation duration
+          }, 500);
         }, 150);
       }
     };
 
     window.addEventListener('resourceLoaded', handleResourceLoaded);
-
-    // Clean up the event listener
-    return () => {
-      window.removeEventListener('resourceLoaded', handleResourceLoaded);
-    };
+    return () => window.removeEventListener('resourceLoaded', handleResourceLoaded);
   });
 
   return (
     <div class={`loading-screen${isHidden() ? ' hidden' : ''}`}>
-      <div class="loading-content">
-        <div class="logo-container">
-          <img src="/icon.svg" alt="Faestro Logo" />
-        </div>
-        <div class="loading-states">
-          <For each={Object.entries(resourceStates())}>
-            {([resource, state]) => (
-              <div class={`loading-state ${state.loaded ? 'loaded' : ''}`}>
-                <i class="ri-checkbox-blank-circle-fill"></i>
-                <span class="resource-name">{resource}</span>
-              </div>
-            )}
-          </For>
-        </div>
+      <div class="logo-container">
+        <img src="/icon.svg" alt="Faestro Logo" />
       </div>
     </div>
   );

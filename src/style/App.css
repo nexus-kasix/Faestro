@@ -1,7 +1,4 @@
-@import url('https://cdn.jsdelivr.net/npm/remixicon@4.4.0/fonts/remixicon.css');
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import url('https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css');
 
 /* ROOT VARIABLES */
 :root {
@@ -62,8 +59,8 @@ body {
   display: grid;
   grid-template-rows: 1fr auto;
   z-index: 1000;
-  backdrop-filter: var(--common-blur);
   -webkit-backdrop-filter: var(--common-blur);
+  backdrop-filter: var(--common-blur);
   transition: all 0.3s var(--transition-bezier);
 }
 
@@ -241,18 +238,18 @@ body {
   background-color: var(--background-light);
   border: var(--border-width) solid var(--border-color);
   box-shadow: var(--box-shadow-default);
-  backdrop-filter: var(--common-blur);
   -webkit-backdrop-filter: var(--common-blur);
+  backdrop-filter: var(--common-blur);
   justify-content: center;
   align-items: center;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
-  -webkit-transform: translate(-50%, -50%);
   -ms-transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
   z-index: 999;
-  animation: fadeIn 0.2s ease-out;
   -webkit-animation: fadeIn 0.2s ease-out;
+  animation: fadeIn 0.2s ease-out;
 }
 
 /* Добавьте медиа-запрос для адаптивности */
@@ -368,8 +365,8 @@ body {
   z-index: 1000;
   padding: 8px;
   min-width: 200px;
-  backdrop-filter: var(--common-blur);
   -webkit-backdrop-filter: var(--common-blur);
+  backdrop-filter: var(--common-blur);
   transform-origin: bottom right;
   animation: menuAppear 0.2s var(--transition-bezier);
 }
@@ -435,8 +432,8 @@ body {
   width: 90%;
   text-align: center;
   box-shadow: var(--box-shadow-default);
-  backdrop-filter: var(--common-blur);
   -webkit-backdrop-filter: var(--common-blur);
+  backdrop-filter: var(--common-blur);
   border: var(--border-width) solid var(--border-color);
 }
 
@@ -654,8 +651,8 @@ body {
 }
 
 .loading-screen img {
-  width: 120px;
-  height: 120px;
+  width: 220px;
+  height: 220px;
   animation: pulse 2s infinite;
 }
 
@@ -665,175 +662,82 @@ body {
   100% { transform: scale(0.95); opacity: 0.8; }
 }
 
-/* Обновить стили галереи в App.css */
-.wallpaper-gallery {
+
+.wallpaper-gallery-container {
   position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: var(--background-light);
-  border-radius: var(--border-radius-large);
-  padding: 35px 20px 20px; /* Увеличен верхний отступ */
-  width: min(800px, 85vw);
-  height: min(600px, 80vh);
-  overflow-y: auto;
-  z-index: 10000;
-  border: var(--border-width) solid var(--border-color);
-  box-shadow: var(--box-shadow-default);
-  backdrop-filter: var(--common-blur);
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.gallery-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.75);
   -webkit-backdrop-filter: var(--common-blur);
+  backdrop-filter: var(--common-blur);
 }
 
-.wallpaper-grid {
-  padding-top: 10px; /* Добавлен отступ сверху */
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 15px;
-}
-
-.gallery-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 999;
-}
-
-.gallery-close {
-  position: absolute; /* Изменено с fixed на absolute */
-  top: 8px;
-  right: 8px;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background: var(--accent-color);
-  color: white;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-  z-index: 10001; /* Выше чем у галереи */
-}
-
-.loading-content {
+.wallpaper-gallery {
+  position: relative;
+  background: var(--background-light);
+  border-radius: var(--border-radius-large);
+  width: min(900px, 90vw);
+  z-index: 10000;
+  border: var(--border-width) solid var(--border-color);
+  box-shadow: var(--box-shadow-default);
+  -webkit-backdrop-filter: var(--common-blur);
+  backdrop-filter: var(--common-blur);
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 30px;
-}
-
-.loading-states {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  font-size: 14px;
-  min-width: 240px;
-}
-
-.loading-state {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  align-items: center;
-  gap: 15px;
-  opacity: 0.5;
-  color: #888;
-  transition: opacity 0.3s ease, color 0.3s ease;
-}
-
-.loading-state.loaded {
-  opacity: 1;
-  color: var(--accent-color);
-}
-
-
-/* Добавить в App.css */
-/* Mobile Device Styles */
-body.mobile-device .console-wrapper {
-  width: 95vw;
-  min-width: 280px;
-  max-width: 400px; /* Limit maximum width */
-  height: auto;
-  padding: 15px;
-}
-
-body.mobile-device #console-logs {
-  font-size: 14px;
-  min-height: 200px;
-  max-height: 60vh; /* Reduce height */
-}
-
-body.mobile-device #console-input {
-  gap: 8px; /* Reduce gap between elements */
-}
-
-body.mobile-device #console-command {
-  font-size: 14px;
-  padding: 8px 12px;
-}
-
-body.mobile-device #console-execute,
-body.mobile-device #console-more {
-  width: 40px; /* Make buttons slightly smaller */
-  height: 40px;
-  padding: 8px;
-}
-
-body.mobile-device #console-execute i,
-body.mobile-device #console-more i {
-  font-size: 18px;
-}
-
-/* Адаптивные стили для Welcome экрана */
-body.mobile-device .welcome-container {
-  width: 100vw;
-  height: 100vh;
-  border-radius: 0;
-  padding: 20px;
-}
-
-body.mobile-device .device-button,
-body.mobile-device .option-button {
-  padding: 12px 20px;
-  font-size: 14px;
-}
-
-body.mobile-device .color-selection button {
-  min-width: 50px;
-  min-height: 50px;
-}
-
-/* Галерея обоев */
-.gallery-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.75);
-  backdrop-filter: blur(5px);
-  z-index: 9999;
-}
-
-/* gallery.css */
-.wallpaper-gallery {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: var(--background-light);
-  border-radius: var(--border-radius-large);
-  padding: 55px 20px 20px; /* Увеличен верхний отступ */
-  width: min(900px, 90vw);
-  height: min(700px, 85vh);
   overflow: hidden;
-  z-index: 10000;
-  border: var(--border-width) solid var(--border-color);
-  box-shadow: var(--box-shadow-default);
-  backdrop-filter: var(--common-blur);
+}
+
+.gallery-header {
+  padding: 16px 20px;
+  border-bottom: var(--border-width) solid var(--border-color);
+  display: flex;
+  background-color: var(--background-light);
+  justify-content: space-between;
+  align-items: center;
+}
+
+.gallery-header h2 {
+  font-family: 'Roboto', sans-serif;
+  font-size: 20px;
+  color: black;
+  margin: 0;
+}
+
+.gallery-close {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--accent-color);
+  color: white;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s var(--transition-bezier);
+}
+
+.gallery-close i {
+  font-size: 20px;
+}
+
+.gallery-close:hover {
+  transform: rotate(90deg);
+  background: var(--accent-dark);
 }
 
 .wallpaper-grid {
@@ -841,7 +745,7 @@ body.mobile-device .color-selection button {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 16px;
-  padding: 4px;
+  padding: 20px;
 }
 
 .wallpaper-item {
@@ -871,38 +775,15 @@ body.mobile-device .color-selection button {
   transform: scale(1.1);
 }
 
-.gallery-close {
-  position: absolute;
-  top: 12px; /* Отступ от верхнего края */
-  right: 12px;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: var(--accent-color);
-  color: white;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 20px;
-  z-index: 1;
-}
-
-.gallery-close:hover {
-  transform: rotate(90deg);
-  background: var(--accent-dark);
-}
-
-/* Медиа-запросы */
 @media (max-width: 768px) {
-  .wallpaper-gallery {
-    padding: 20px;
-  }
-  
   .wallpaper-grid {
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
     gap: 12px;
+    padding: 16px;
+  }
+  
+  .gallery-header h2 {
+    font-size: 18px;
   }
 }
 
@@ -916,540 +797,6 @@ body.mobile-device .color-selection button {
   .wallpaper-grid {
     grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
     gap: 8px;
+    padding: 12px;
   }
-}
-
-/* Добавить в App.css */
-/* Mobile Device Styles */
-body.mobile-device .console-wrapper {
-  width: 95vw;
-  min-width: 280px;
-  max-width: 400px; /* Limit maximum width */
-  height: auto;
-  padding: 15px;
-}
-
-body.mobile-device #console-logs {
-  font-size: 14px;
-  min-height: 200px;
-  max-height: 60vh; /* Reduce height */
-}
-
-body.mobile-device #console-input {
-  gap: 8px; /* Reduce gap between elements */
-}
-
-body.mobile-device #console-command {
-  font-size: 14px;
-  padding: 8px 12px;
-}
-
-body.mobile-device #console-execute,
-body.mobile-device #console-more {
-  width: 40px; /* Make buttons slightly smaller */
-  height: 40px;
-  padding: 8px;
-}
-
-body.mobile-device #console-execute i,
-body.mobile-device #console-more i {
-  font-size: 18px;
-}
-
-/* Адаптивные стили для Welcome экрана */
-body.mobile-device .welcome-container {
-  width: 100vw;
-  height: 100vh;
-  border-radius: 0;
-  padding: 20px;
-}
-
-body.mobile-device .device-button,
-body.mobile-device .option-button {
-  padding: 12px 20px;
-  font-size: 14px;
-}
-
-body.mobile-device .color-selection button {
-  min-width: 50px;
-  min-height: 50px;
-}
-
-/* Галерея обоев */
-.gallery-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.75);
-  backdrop-filter: blur(5px);
-  z-index: 9999;
-}
-
-/* gallery.css */
-.wallpaper-gallery {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: var(--background-light);
-  border-radius: var(--border-radius-large);
-  padding: 55px 20px 20px; /* Увеличен верхний отступ */
-  width: min(900px, 90vw);
-  height: min(700px, 85vh);
-  overflow: hidden;
-  z-index: 10000;
-  border: var(--border-width) solid var(--border-color);
-  box-shadow: var(--box-shadow-default);
-  backdrop-filter: var(--common-blur);
-}
-
-.wallpaper-grid {
-  overflow-y: auto;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 16px;
-  padding: 4px;
-}
-
-.wallpaper-item {
-  aspect-ratio: 16/9;
-  border-radius: var(--border-radius-small);
-  overflow: hidden;
-  cursor: pointer;
-  transition: all 0.3s var(--transition-bezier);
-  position: relative;
-  border: 2px solid transparent;
-}
-
-.wallpaper-item:hover {
-  transform: translateY(-4px);
-  border-color: var(--accent-color);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.wallpaper-item img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.3s var(--transition-bezier);
-}
-
-.wallpaper-item:hover img {
-  transform: scale(1.1);
-}
-
-.gallery-close {
-  position: absolute;
-  top: 12px; /* Отступ от верхнего края */
-  right: 12px;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: var(--accent-color);
-  color: white;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 20px;
-  z-index: 1;
-}
-
-.gallery-close:hover {
-  transform: rotate(90deg);
-  background: var(--accent-dark);
-}
-
-/* Медиа-запросы */
-@media (max-width: 768px) {
-  .wallpaper-gallery {
-    padding: 20px;
-  }
-  
-  .wallpaper-grid {
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 12px;
-  }
-}
-
-@media (max-width: 480px) {
-  .wallpaper-gallery {
-    width: 100vw;
-    height: 100vh;
-    border-radius: 0;
-  }
-  
-  .wallpaper-grid {
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-    gap: 8px;
-  }
-}
-
-
-/* Добавить в App.css */
-/* Mobile Device Styles */
-body.mobile-device .console-wrapper {
-  width: 95vw;
-  min-width: 280px;
-  max-width: 400px; /* Limit maximum width */
-  height: auto;
-  padding: 15px;
-}
-
-body.mobile-device #console-logs {
-  font-size: 14px;
-  min-height: 200px;
-  max-height: 60vh; /* Reduce height */
-}
-
-body.mobile-device #console-input {
-  gap: 8px; /* Reduce gap between elements */
-}
-
-body.mobile-device #console-command {
-  font-size: 14px;
-  padding: 8px 12px;
-}
-
-body.mobile-device #console-execute,
-body.mobile-device #console-more {
-  width: 40px; /* Make buttons slightly smaller */
-  height: 40px;
-  padding: 8px;
-}
-
-body.mobile-device #console-execute i,
-body.mobile-device #console-more i {
-  font-size: 18px;
-}
-
-/* Адаптивные стили для Welcome экрана */
-body.mobile-device .welcome-container {
-  width: 100vw;
-  height: 100vh;
-  border-radius: 0;
-  padding: 20px;
-}
-
-body.mobile-device .device-button,
-body.mobile-device .option-button {
-  padding: 12px 20px;
-  font-size: 14px;
-}
-
-body.mobile-device .color-selection button {
-  min-width: 50px;
-  min-height: 50px;
-}
-
-/* Галерея обоев */
-.gallery-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.75);
-  backdrop-filter: blur(5px);
-  z-index: 9999;
-}
-
-/* gallery.css */
-.wallpaper-gallery {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: var(--background-light);
-  border-radius: var(--border-radius-large);
-  padding: 55px 20px 20px; /* Увеличен верхний отступ */
-  width: min(900px, 90vw);
-  height: min(700px, 85vh);
-  overflow: hidden;
-  z-index: 10000;
-  border: var(--border-width) solid var(--border-color);
-  box-shadow: var(--box-shadow-default);
-  backdrop-filter: var(--common-blur);
-}
-
-.wallpaper-grid {
-  overflow-y: auto;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 16px;
-  padding: 4px;
-}
-
-.wallpaper-item {
-  aspect-ratio: 16/9;
-  border-radius: var(--border-radius-small);
-  overflow: hidden;
-  cursor: pointer;
-  transition: all 0.3s var(--transition-bezier);
-  position: relative;
-  border: 2px solid transparent;
-}
-
-.wallpaper-item:hover {
-  transform: translateY(-4px);
-  border-color: var(--accent-color);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.wallpaper-item img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.3s var(--transition-bezier);
-}
-
-.wallpaper-item:hover img {
-  transform: scale(1.1);
-}
-
-.gallery-close {
-  position: absolute;
-  top: 12px; /* Отступ от верхнего края */
-  right: 12px;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: var(--accent-color);
-  color: white;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 20px;
-  z-index: 1;
-}
-
-.gallery-close:hover {
-  transform: rotate(90deg);
-  background: var(--accent-dark);
-}
-
-/* Медиа-запросы */
-@media (max-width: 768px) {
-  .wallpaper-gallery {
-    padding: 20px;
-  }
-  
-  .wallpaper-grid {
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 12px;
-  }
-}
-
-@media (max-width: 480px) {
-  .wallpaper-gallery {
-    width: 100vw;
-    height: 100vh;
-    border-radius: 0;
-  }
-  
-  .wallpaper-grid {
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-    gap: 8px;
-  }
-}
-/* Mobile Device Styles */
-body.mobile-device .console-wrapper {
-  width: 95vw;
-  min-width: 280px;
-  max-width: 400px; /* Limit maximum width */
-  height: auto;
-  padding: 15px;
-}
-
-body.mobile-device #console-logs {
-  font-size: 14px;
-  min-height: 200px;
-  max-height: 60vh; /* Reduce height */
-}
-
-body.mobile-device #console-input {
-  gap: 8px; /* Reduce gap between elements */
-}
-
-body.mobile-device #console-command {
-  font-size: 14px;
-  padding: 8px 12px;
-}
-
-body.mobile-device #console-execute,
-body.mobile-device #console-more {
-  width: 40px; /* Make buttons slightly smaller */
-  height: 40px;
-  padding: 8px;
-}
-
-body.mobile-device #console-execute i,
-body.mobile-device #console-more i {
-  font-size: 18px;
-}
-
-/* Адаптивные стили для Welcome экрана */
-body.mobile-device .welcome-container {
-  width: 100vw;
-  height: 100vh;
-  border-radius: 0;
-  padding: 20px;
-}
-
-body.mobile-device .device-button,
-body.mobile-device .option-button {
-  padding: 12px 20px;
-  font-size: 14px;
-}
-
-body.mobile-device .color-selection button {
-  min-width: 50px;
-  min-height: 50px;
-}
-
-/* Галерея обоев */
-.gallery-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.75);
-  backdrop-filter: blur(5px);
-  z-index: 9999;
-}
-
-/* gallery.css */
-.wallpaper-gallery {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: var(--background-light);
-  border-radius: var(--border-radius-large);
-  padding: 55px 20px 20px; /* Увеличен верхний отступ */
-  width: min(900px, 90vw);
-  height: min(700px, 85vh);
-  overflow: hidden;
-  z-index: 10000;
-  border: var(--border-width) solid var(--border-color);
-  box-shadow: var(--box-shadow-default);
-  backdrop-filter: var(--common-blur);
-}
-
-.wallpaper-grid {
-  overflow-y: auto;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 16px;
-  padding: 4px;
-}
-
-.wallpaper-item {
-  aspect-ratio: 16/9;
-  border-radius: var(--border-radius-small);
-  overflow: hidden;
-  cursor: pointer;
-  transition: all 0.3s var(--transition-bezier);
-  position: relative;
-  border: 2px solid transparent;
-}
-
-.wallpaper-item:hover {
-  transform: translateY(-4px);
-  border-color: var(--accent-color);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.wallpaper-item img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.3s var(--transition-bezier);
-}
-
-.wallpaper-item:hover img {
-  transform: scale(1.1);
-}
-
-.gallery-close {
-  position: absolute;
-  top: 12px; /* Отступ от верхнего края */
-  right: 12px;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: var(--accent-color);
-  color: white;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 20px;
-  z-index: 1;
-}
-
-.gallery-close:hover {
-  transform: rotate(90deg);
-  background: var(--accent-dark);
-}
-
-/* Медиа-запросы */
-@media (max-width: 768px) {
-  .wallpaper-gallery {
-    padding: 20px;
-  }
-  
-  .wallpaper-grid {
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 12px;
-  }
-}
-
-@media (max-width: 480px) {
-  .wallpaper-gallery {
-    width: 100vw;
-    height: 100vh;
-    border-radius: 0;
-  }
-  
-  .wallpaper-grid {
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-    gap: 8px;
-  }
-}
-
-/* loading.css */
-.loading-states {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  font-size: 14px;
-  min-width: 240px;
-}
-
-.loading-state {
-  display: flex; /* Changed from grid */
-  justify-content: flex-start;
-  align-items: center;
-  opacity: 0.5;
-  color: #888;
-  transition: opacity 0.3s ease, color 0.3s ease;
-}
-
-.loading-state i {
-  font-size: 12px;
-  color: #888;
-  margin-right: 8px;
-  transition: color 0.3s ease;
-}
-
-.loading-state.loaded i {
-  color: var(--accent-color);
 }
