@@ -81,11 +81,23 @@ export const safariumCommands = {
     }
 
     const gallery = document.createElement('div');
-    gallery.className = 'wallpaper-gallery';
+    gallery.className = 'wallpaper-gallery-container';
+
+    const overlay = document.createElement('div');
+    overlay.className = 'gallery-overlay';
+
+    const galleryContent = document.createElement('div');
+    galleryContent.className = 'wallpaper-gallery';
+
+    const header = document.createElement('div');
+    header.className = 'gallery-header';
+
+    const title = document.createElement('h2');
+    title.textContent = 'Wallpaper Gallery';
 
     const closeBtn = document.createElement('button');
     closeBtn.className = 'gallery-close';
-    closeBtn.innerHTML = '×';
+    closeBtn.innerHTML = '<i class="ri-close-circle-line"></i>';
     closeBtn.onclick = () => gallery.remove();
 
     const grid = document.createElement('div');
@@ -115,8 +127,12 @@ export const safariumCommands = {
       grid.appendChild(item);
     });
 
-    gallery.appendChild(closeBtn);
-    gallery.appendChild(grid);
+    header.appendChild(title);
+    header.appendChild(closeBtn);
+    galleryContent.appendChild(header);
+    galleryContent.appendChild(grid);
+    gallery.appendChild(overlay);
+    gallery.appendChild(galleryContent);
     document.body.appendChild(gallery);
 
     return "Wallpaper gallery opened";
