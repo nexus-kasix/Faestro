@@ -20,3 +20,5 @@ Nexus Faestro is a modern, interactive web console application built with [Solid
 | `main` | Main | 🟡 Main |
 | `dev` | Early Features | 🟠 Experimental |
 | `ivan-branch` | Feature Development | 🔵 Experimental |
+| `mini` | Light version of Faestro | 🔴 Minimal |
+| `se` | Extra minimal version of Faestro | 🟣 Experimental |
