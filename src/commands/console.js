@@ -2,7 +2,7 @@ import safariumCommands from './safarium';
 
 export const commands = {
   'faestro.clear': () => "Console cleared",
-  'faestro.version': () => "Faestro version 1.7 R",
+  'faestro.version': () => "Faestro version 1.8 Q1",
   'faestro.link': (link) => {
     if (!link.startsWith('http://') && !link.startsWith('https://')) {
       link = 'https://' + link;
@@ -23,7 +23,7 @@ export const commands = {
 • Everyone who contributed to making Faestro possible.
 • Artificial Intelligence & LLMs.
 
-Version: Faestro version 1.7 
+Version: Faestro version 1.8 Q1
 © 2024 Nexus Projects.`,
   'faestro.reset': () => {
     localStorage.removeItem('faestro-settings');
