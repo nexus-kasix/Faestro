@@ -36,12 +36,35 @@ const dispatchLoadingEvent = (resource) => {
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 const loadCommands = async () => {
-  await Promise.all([
-    loadWithTimeout(import('../commands/console.js')),
-    loadWithTimeout(import('../commands/safarium.js'))
-  ]);
-  loadingStates.set(RESOURCES.COMMANDS, true);
-  dispatchLoadingEvent(RESOURCES.COMMANDS);
+  try {
+    // Load commands sequentially instead of in parallel
+    const consoleCommands = await loadWithTimeout(
+      import('../commands/console.js'), 
+      10000
+    );
+    
+    if (!consoleCommands) {
+      console.warn('Failed to load console commands, using fallback');
+    }
+    
+    const safariumCommands = await loadWithTimeout(
+      import('../commands/safarium.js'), 
+      10000
+    );
+    
+    if (!safariumCommands) {
+      console.warn('Failed to load safarium commands, using fallback');
+    }
+
+    // Continue even if some commands fail to load
+    loadingStates.set(RESOURCES.COMMANDS, true);
+    dispatchLoadingEvent(RESOURCES.COMMANDS);
+  } catch (error) {
+    console.error('Error loading commands:', error);
+    // Set loading state to true anyway to prevent blocking
+    loadingStates.set(RESOURCES.COMMANDS, true);
+    dispatchLoadingEvent(RESOURCES.COMMANDS);
+  }
 };
 
 const loadInterface = async () => {
@@ -69,14 +92,37 @@ const loadThemes = async () => {
 
 const loadBackgrounds = async () => {
   const wallpapers = Array.from({length: 8}, (_, i) => `/wallpapers/example${i + 1}.jpg`);
-  await Promise.all(wallpapers.map(url => 
-    loadWithTimeout(new Promise((resolve, reject) => {
-      const img = new Image();
-      img.onload = resolve;
-      img.onerror = reject;
-      img.src = url;
-    }))
-  ));
+  
+  // Load images in smaller batches to prevent overwhelming the browser
+  const batchSize = 3;
+  const batches = [];
+  
+  for (let i = 0; i < wallpapers.length; i += batchSize) {
+    const batch = wallpapers.slice(i, i + batchSize);
+    batches.push(batch);
+  }
+
+  for (const batch of batches) {
+    await Promise.all(batch.map(url => 
+      loadWithTimeout(new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => {
+          // Add successful image to cache
+          const cache = new Image();
+          cache.src = url;
+          resolve();
+        };
+        img.onerror = () => {
+          console.warn(`Failed to load wallpaper: ${url}`);
+          resolve(); // Resolve anyway to prevent blocking
+        };
+        img.src = url;
+      }), 15000) // Increased timeout for images
+    ));
+    // Small delay between batches
+    await delay(100);
+  }
+
   loadingStates.set(RESOURCES.BACKGROUNDS, true);
   dispatchLoadingEvent(RESOURCES.BACKGROUNDS);
 };

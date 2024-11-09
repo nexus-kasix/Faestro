@@ -162,7 +162,7 @@ const SafariumSettings = ({ onClose }) => {
           id: 'version',
           title: 'Version',
           icon: 'ri-code-line',
-          value: () => 'Faestro 1.8 Q1'
+          value: () => 'Faestro 1.8 Q2'
         },
         {
           id: 'reset',
