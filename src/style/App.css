@@ -1458,8 +1458,9 @@ body {
 
 .speech-modal-controls {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
+  gap: 16px;
   padding: 8px 0;
 }
 
@@ -1534,5 +1535,61 @@ body {
 
   .speech-modal-header button:hover {
     background: rgba(255, 255, 255, 0.15);
+  }
+}
+
+/* Speech Modal Language Select Styles */
+.speech-modal select {
+  width: 140px;
+  padding: 8px 12px;
+  border-radius: 16px;
+  border: 1px solid var(--border-color);
+  background: var(--background-white);
+  font-family: var(--font-family-main);
+  font-size: 14px;
+  color: var(--accent-color);
+  cursor: pointer;
+  transition: all 0.2s var(--transition-bezier);
+  outline: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  padding-right: 32px;
+  text-align: center;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 12px;
+}
+
+.speech-modal select:hover {
+  border-color: var(--accent-color);
+  background-color: rgba(255, 255, 255, 0.95);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.speech-modal select:focus {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 2px rgba(107, 114, 128, 0.1);
+}
+
+/* Стили для темной темы */
+@media (prefers-color-scheme: dark) {
+  .speech-modal select {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.9);
+    border-color: rgba(255, 255, 255, 0.2);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  }
+
+  .speech-modal select:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.3);
+  }
+
+  .speech-modal select:focus {
+    border-color: rgba(255, 255, 255, 0.4);
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
   }
 }

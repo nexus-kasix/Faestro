@@ -98,8 +98,8 @@ function Main() {
   };
 
   const handleVoiceCommand = (voiceCommand) => {
-    // Определяем соответствие голосовых команд консольным командам
     const commandMap = {
+      // Russian commands
       'очисти': 'faestro.clear',
       'очисти все': 'faestro.clear',
       'очисти всё': 'faestro.clear',
@@ -107,6 +107,68 @@ function Main() {
       'настройки': 'faestro.safarium.settings',
       'версия': 'faestro.version',
       'какая версия': 'faestro.version',
+      'хочу новые обои': 'faestro.safarium.background.wallpaper_gallery',
+      'поменять обои': 'faestro.safarium.background.wallpaper_gallery',
+      'галерея обоев': 'faestro.safarium.background.wallpaper_gallery',
+      'открой галерею': 'faestro.safarium.background.wallpaper_gallery',
+      'обои': 'faestro.safarium.background.wallpaper_gallery',
+      'покажи авторов': 'faestro.credits',
+      'авторы': 'faestro.credits',
+      'создатели': 'faestro.credits',
+      'сброс настроек': 'faestro.reset',
+      'сбросить настройки': 'faestro.reset',
+      'перезагрузить': 'faestro.reset',
+      'все комманды': '',
+
+      // Help commands in Russian
+      'помощь': 'faestro.anospeech.help',
+      'справка': 'faestro.anospeech.help',
+      'что ты умеешь': 'faestro.anospeech.help',
+      'покажи команды': 'faestro.anospeech.help',
+      'список команд': 'faestro.anospeech.help',
+      'голосовые команды': 'faestro.anospeech.help',
+
+      // English commands
+      'clear': 'faestro.clear',
+      'clear all': 'faestro.clear',
+      'open settings': 'faestro.safarium.settings',
+      'settings': 'faestro.safarium.settings',
+      'version': 'faestro.version',
+      'what version': 'faestro.version',
+      'i want new wallpapers': 'faestro.safarium.background.wallpaper_gallery',
+      'change wallpaper': 'faestro.safarium.background.wallpaper_gallery',
+      'wallpaper gallery': 'faestro.safarium.background.wallpaper_gallery',
+      'open gallery': 'faestro.safarium.background.wallpaper_gallery',
+      'wallpapers': 'faestro.safarium.background.wallpaper_gallery',
+      'show authors': 'faestro.credits',
+      'authors': 'faestro.credits',
+      'creators': 'faestro.credits',
+      'reset settings': 'faestro.reset',
+      'reset': 'faestro.reset',
+      'reboot': 'faestro.reset',
+      'all commands': '',
+
+      // Help commands in English
+      'help': 'faestro.anospeech.help',
+      'guide': 'faestro.anospeech.help',
+      'what can you do': 'faestro.anospeech.help',
+      'show commands': 'faestro.anospeech.help',
+      'command list': 'faestro.anospeech.help',
+      'voice commands': 'faestro.anospeech.help',
+
+      // Wallpaper commands (исправленные)
+      'хочу новые обои': 'faestro.safarium.background.wallpaper_gallery',
+      'поменять обои': 'faestro.safarium.background.wallpaper_gallery',
+      'галерея обоев': 'faestro.safarium.background.wallpaper_gallery',
+      'открой галерею': 'faestro.safarium.background.wallpaper_gallery',
+      'обои': 'faestro.safarium.background.wallpaper_gallery',
+
+      // New commands for AnoSpeech capabilities
+      'что нового': 'faestro.anospeech.help',
+      'что ты можешь': 'faestro.anospeech.help',
+      'возможности': 'faestro.anospeech.help',
+      'какие есть команды': 'faestro.anospeech.help',
+      'расскажи о себе': 'faestro.anospeech.help',
     };
 
     // Нормализуем голосовую команду (убираем лишние пробелы, приводим к нижнему регистру)
