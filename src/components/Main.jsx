@@ -107,11 +107,11 @@ function Main() {
       'настройки': 'faestro.safarium.settings',
       'версия': 'faestro.version',
       'какая версия': 'faestro.version',
-      'хочу новые обои': 'faestro.safarium.background.wallpaper_gallery',
-      'поменять обои': 'faestro.safarium.background.wallpaper_gallery',
-      'галерея обоев': 'faestro.safarium.background.wallpaper_gallery',
-      'открой галерею': 'faestro.safarium.background.wallpaper_gallery',
-      'обои': 'faestro.safarium.background.wallpaper_gallery',
+      'хочу новые обои': 'faestro.safarium.settings',
+      'поменять обои': 'faestro.safarium.settings',
+      'галерея обоев': 'faestro.safarium.settings',
+      'открой галерею': 'faestro.safarium.settings',
+      'обои': 'faestro.safarium.settings',
       'покажи авторов': 'faestro.credits',
       'авторы': 'faestro.credits',
       'создатели': 'faestro.credits',
@@ -157,11 +157,6 @@ function Main() {
       'voice commands': 'faestro.anospeech.help',
 
       // Wallpaper commands (исправленные)
-      'хочу новые обои': 'faestro.safarium.background.wallpaper_gallery',
-      'поменять обои': 'faestro.safarium.background.wallpaper_gallery',
-      'галерея обоев': 'faestro.safarium.background.wallpaper_gallery',
-      'открой галерею': 'faestro.safarium.background.wallpaper_gallery',
-      'обои': 'faestro.safarium.background.wallpaper_gallery',
 
       // New commands for AnoSpeech capabilities
       'что нового': 'faestro.anospeech.help',

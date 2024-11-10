@@ -1,11 +1,13 @@
 import { createSignal, Show } from "solid-js";
 import ColorPicker from "./ColorPicker";
+import WallpaperGallery from "./WallpaperGallery";
 import { commands } from "../commands/console";
 
 const SafariumSettings = ({ onClose }) => {
   const [activeSection, setActiveSection] = createSignal(null);
   const [activeSubSection, setActiveSubSection] = createSignal(null);
   const [showColorPicker, setShowColorPicker] = createSignal(false);
+  const [showWallpaperGallery, setShowWallpaperGallery] = createSignal(false);
 
   const handleColorChange = (color) => {
     document.documentElement.style.setProperty('--accent-color', color);
@@ -93,8 +95,7 @@ const SafariumSettings = ({ onClose }) => {
               title: 'Wallpaper Gallery',
               icon: 'ri-gallery-line',
               action: () => {
-                onClose();
-                commands['faestro.safarium.background.wallpaper_gallery']();
+                setShowWallpaperGallery(true);
               }
             },
             {
@@ -181,6 +182,15 @@ const SafariumSettings = ({ onClose }) => {
   ];
 
   const renderContent = () => {
+    if (showWallpaperGallery()) {
+      return (
+        <WallpaperGallery 
+          onClose={() => setShowWallpaperGallery(false)}
+          onSelect={() => setShowWallpaperGallery(false)}
+        />
+      );
+    }
+
     if (activeSubSection()) {
       const section = activeSection();
       const item = section.items.find(i => i.id === activeSubSection().parentId);

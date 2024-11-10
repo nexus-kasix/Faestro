@@ -83,7 +83,7 @@ body {
 
 #console-input {
   display: grid;
-  grid-template-columns: 1fr auto auto;
+  grid-template-columns: 1fr auto auto auto;
   gap: 10px;
   -webkit-align-items: center;
       -ms-flex-align: center;
@@ -697,11 +697,11 @@ body {
 }
 
 .wallpaper-grid {
-  overflow-y: auto;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 16px;
   padding: 20px;
+  overflow-y: auto;
 }
 
 .wallpaper-item {
@@ -784,138 +784,99 @@ body {
   position: relative;
   width: 90%;
   max-width: 500px;
-  max-height: 80vh;
+  max-height: 85vh;
+  min-height: 300px;
   background: var(--background-light);
   border-radius: var(--border-radius-large);
   overflow: hidden;
   display: flex;
   flex-direction: column;
   border: var(--border-width) solid var(--border-color);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
 }
 
-.settings-header {
-  padding: 20px;
-  border-bottom: var(--border-width) solid var(--border-color);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.settings-header h2 {
-  margin: 0;
-  font-size: 20px;
-}
-
-.settings-close {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  border: none;
-  background: var(--accent-color);
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.3s var(--transition-bezier);
-}
-
-.settings-sections {
-  overflow-y: auto;
-  padding: 10px;
-}
-
-.settings-section {
-  display: flex;
-  align-items: center;
-  padding: 15px;
-  border-radius: var(--border-radius-small);
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.settings-section:hover {
-  background-color: rgba(0, 0, 0, 0.05);
-}
-
-.section-icon {
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
-  background: var(--accent-color);
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 15px;
-}
-
-.section-icon i {
-  font-size: 20px;
-}
-
-.section-content {
-  flex: 1;
-}
-
-.section-title {
-  font-size: 16px;
-  font-weight: 500;
-}
-
-/* Добавьте остальные стили для detail view */
-
-.color-picker-container {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 10000;
-  background: var(--background-light);
-  padding: 20px;
-  border-radius: var(--border-radius-large);
-  border: var(--border-width) solid var(--border-color);
-  box-shadow: var(--box-shadow-default);
-}
-
-/* Обновим анимации для переходов */
-@keyframes fadeSlideIn {
-  from {
-    opacity: 0;
-    transform: translateX(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-.settings-sections,
 .settings-detail {
-  animation: fadeSlideIn 0.3s var(--transition-bezier);
-}
-
-.back-button {
   display: flex;
-  align-items: center;
-  gap: 8px;
-  border: none;
-  background: none;
-  color: var(--accent-color);
-  font-size: 14px;
-  font-weight: 400;
-  cursor: pointer;
-  padding: 8px 12px;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+}
+
+.detail-header {
+  flex-shrink: 0;
+  padding: 16px;
+  border-bottom: 1px solid var(--border-color);
+  background: var(--background-light);
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.detail-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+}
+
+.wallpaper-grid {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.wallpaper-item {
+  aspect-ratio: 16/9;
   border-radius: var(--border-radius-small);
+  overflow: hidden;
+  cursor: pointer;
   transition: all 0.3s var(--transition-bezier);
+  position: relative;
+  border: 2px solid transparent;
 }
 
-.back-button:hover {
-  background: rgba(0, 0, 0, 0.035);
+.wallpaper-item:hover {
+  transform: translateY(-4px);
+  border-color: var(--accent-color);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-.back-button i {
-  font-size: 20px;
+.wallpaper-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s var(--transition-bezier);
+}
+
+.wallpaper-item:hover img {
+  transform: scale(1.1);
+}
+
+@media (max-width: 768px) {
+  .settings-container {
+    width: 95%;
+  }
+  
+  .wallpaper-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .settings-container {
+    width: 100%;
+    height: 100vh;
+    max-height: 100vh;
+    border-radius: 0;
+  }
+  
+  .wallpaper-grid {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 8px;
+  }
 }
 
 .safarium-settings {
@@ -1109,6 +1070,7 @@ body {
   width: 90%;
   max-width: 500px;
   max-height: 85vh;
+  min-height: 300px;
   background: var(--background-light);
   border-radius: var(--border-radius-large);
   overflow: hidden;
@@ -1161,19 +1123,46 @@ body {
 .settings-section {
   display: flex;
   align-items: center;
-  padding: 12px;
+  padding: 16px;
   border-radius: var(--border-radius-small);
   cursor: pointer;
-  transition: all 0.2s ease;
-  margin-bottom: 8px;
+  transition: all 0.3s var(--transition-bezier);
+  margin-bottom: 10px;
   background: var(--background-white);
-  border: 1px solid transparent;
+  border: 2px solid transparent;
+  position: relative;
+  overflow: hidden;
+}
+
+.settings-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.6s var(--transition-bezier);
+}
+
+.settings-section:hover::before {
+  transform: translateX(100%);
 }
 
 .settings-section:hover {
-  transform: translateY(-2px);
+  transform: translateY(-3px);
   border-color: var(--accent-color);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+/* Enhanced icon animation */
+.settings-section:hover .section-icon {
+  transform: scale(1.1) rotate(5deg);
+}
+
+.section-icon {
+  transition: all 0.3s var(--transition-bezier);
 }
 
 .section-icon {
@@ -1347,10 +1336,12 @@ body {
   padding: 16px;
   border-radius: var(--border-radius-small);
   cursor: pointer;
-  transition: all 0.2s ease;
-  margin-bottom: 8px;
+  transition: all 0.3s var(--transition-bezier);
+  margin-bottom: 10px;
   background: var(--background-white);
-  border: 1px solid transparent;
+  border: 2px solid transparent;
+  position: relative;
+  overflow: hidden;
 }
 
 .section-title,
@@ -1592,4 +1583,247 @@ body {
     border-color: rgba(255, 255, 255, 0.4);
     box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
   }
+}
+
+/* Wallpaper Gallery Styles */
+.wallpaper-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+  padding: 16px;
+  overflow-y: auto;
+  max-height: 60vh; /* Фиксированная высота для скролла */
+}
+
+.settings-detail {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden; /* Предотвращаем скролл всего контейнера */
+}
+
+.detail-header {
+  flex-shrink: 0; /* Предотвращаем сжатие хедера */
+  padding: 16px;
+  border-bottom: 1px solid var(--border-color);
+  background: var(--background-light);
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+/* Обновляем стили скролла */
+.wallpaper-grid::-webkit-scrollbar {
+  width: 6px;
+}
+
+.wallpaper-grid::-webkit-scrollbar-track {
+  background: transparent;
+  margin: 4px;
+}
+
+.wallpaper-grid::-webkit-scrollbar-thumb {
+  background: var(--accent-color);
+  border-radius: 3px;
+}
+
+/* App.css */
+.detail-header {
+  background-color: var(--background-light);
+  /* Дополнительные стили */
+}
+
+.wallpaper-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+  overflow-y: auto;
+}
+
+.wallpaper-item {
+  position: relative;
+  overflow: hidden;
+}
+
+.wallpaper-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.wallpaper-item:hover img {
+  transform: scale(1.05);
+}
+
+.wallpaper-grid::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-color);
+}
+
+/* Enhanced Settings Styles */
+.settings-section {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  border-radius: var(--border-radius-small);
+  cursor: pointer;
+  transition: all 0.3s var(--transition-bezier);
+  margin-bottom: 12px;
+  background: var(--background-white);
+  border: 2px solid transparent;
+  position: relative;
+  overflow: hidden;
+}
+
+.settings-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.6s var(--transition-bezier);
+}
+
+.settings-section:hover::before {
+  transform: translateX(100%);
+}
+
+.settings-section:hover {
+  transform: translateY(-3px);
+  border-color: var(--accent-color);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.section-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: var(--accent-color);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 18px;
+  transition: all 0.3s var(--transition-bezier);
+  position: relative;
+  overflow: hidden;
+}
+
+.section-icon::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.4s var(--transition-bezier);
+}
+
+.settings-section:hover .section-icon::after {
+  transform: translateX(100%);
+}
+
+.section-icon i {
+  font-size: 24px;
+  transition: transform 0.3s var(--transition-bezier);
+}
+
+.settings-section:hover .section-icon i {
+  transform: scale(1.1);
+}
+
+.settings-container {
+  animation: settingsAppear 0.4s var(--transition-bezier);
+}
+
+@keyframes settingsAppear {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Enhanced Detail Items */
+.detail-item {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  border-radius: var(--border-radius-small);
+  cursor: pointer;
+  transition: all 0.3s var(--transition-bezier);
+  margin-bottom: 10px;
+  background: var(--background-white);
+  border: 2px solid transparent;
+  position: relative;
+  overflow: hidden;
+}
+
+.detail-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.6s var(--transition-bezier);
+}
+
+.detail-item:hover::before {
+  transform: translateX(100%);
+}
+
+.detail-item:hover {
+  transform: translateY(-3px);
+  border-color: var(--accent-color);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.item-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: var(--accent-color);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 16px;
+  transition: all 0.3s var(--transition-bezier);
+}
+
+.detail-item:hover .item-icon {
+  transform: scale(1.1) rotate(5deg);
+}
+
+.item-icon i {
+  font-size: 20px;
+  transition: transform 0.3s var(--transition-bezier);
+}
+
+/* Dangerous Item Styling */
+.detail-item.dangerous {
+  border-color: rgba(239, 68, 68, 0.2);
+  background: rgba(239, 68, 68, 0.05);
+}
+
+.detail-item.dangerous .item-icon {
+  background: rgb(239, 68, 68);
+}
+
+.detail-item.dangerous .item-title {
+  color: rgb(239, 68, 68);
+}
+
+.detail-item.dangerous:hover {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: rgb(239, 68, 68);
 }
