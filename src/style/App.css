@@ -1827,3 +1827,195 @@ body {
   background: rgba(239, 68, 68, 0.1);
   border-color: rgb(239, 68, 68);
 }
+
+/* Add to App.css */
+.faestro-speech {
+  position: absolute;
+  bottom: 90px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255, 255, 255, 0.95);
+  padding: 16px;
+  border-radius: 24px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  z-index: 1000;
+  width: 480px;
+  backdrop-filter: blur(20px);
+  animation: speechModalAppear 0.3s var(--transition-bezier);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.faestro-speech-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.faestro-speech-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--accent-color);
+}
+
+.faestro-speech-title i {
+  font-size: 20px;
+}
+
+.faestro-speech-close {
+  width: 28px;
+  height: 28px;
+  border-radius: 14px;
+  border: none;
+  background: rgba(0, 0, 0, 0.06);
+  color: var(--accent-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s var(--transition-bezier);
+}
+
+.faestro-speech-close:hover {
+  background: rgba(0, 0, 0, 0.1);
+  transform: rotate(90deg);
+}
+
+.faestro-speech-input-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.8);
+  padding: 8px 12px;
+  border-radius: 16px;
+  border: 1px solid var(--border-color);
+}
+
+.faestro-speech-ai-icon {
+  color: var(--accent-color);
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.faestro-speech-input-container input {
+  flex: 1;
+  border: none;
+  background: none;
+  font-size: 15px;
+  color: var(--accent-color);
+  outline: none;
+  padding: 8px 0;
+}
+
+.faestro-speech-input-container input::placeholder {
+  color: rgba(107, 114, 128, 0.6);
+}
+
+.faestro-speech-action {
+  width: 36px;
+  height: 36px;
+  border-radius: 18px;
+  border: none;
+  background: var(--accent-color);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s var(--transition-bezier);
+}
+
+.faestro-speech-action:hover {
+  transform: scale(1.05);
+  filter: brightness(1.1);
+}
+
+.faestro-speech-action.recording {
+  background: #ef4444;
+  animation: micPulse 2s infinite cubic-bezier(0.4, 0, 0.6, 1);
+}
+
+.faestro-speech-footer {
+  margin-top: 12px;
+  display: flex;
+  justify-content: center;
+}
+
+.faestro-speech-footer select {
+  padding: 6px 24px 6px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  background: rgba(255, 255, 255, 0.8);
+  font-size: 13px;
+  color: var(--accent-color);
+  cursor: pointer;
+  outline: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+}
+
+@media (max-width: 520px) {
+  .faestro-speech {
+    width: 90%;
+  }
+}
+
+/* Dark theme support */
+@media (prefers-color-scheme: dark) {
+  .faestro-speech {
+    background: rgba(30, 30, 30, 0.95);
+  }
+
+  .faestro-speech-input-container {
+    background: rgba(0, 0, 0, 0.2);
+  }
+
+  .faestro-speech-input-container input {
+    color: rgba(255, 255, 255, 0.9);
+  }
+
+  .faestro-speech-input-container input::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+  }
+
+  .faestro-speech-title {
+    color: rgba(255, 255, 255, 0.9);
+  }
+
+  .faestro-speech-ai-icon {
+    color: rgba(255, 255, 255, 0.7);
+  }
+}
+
+.faestro-speech-response {
+  margin-top: 12px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  font-size: 14px;
+  color: var(--accent-color);
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.faestro-speech-action.processing {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-color-scheme: dark) {
+  .faestro-speech-response {
+    background: rgba(0, 0, 0, 0.2);
+    color: rgba(255, 255, 255, 0.9);
+  }
+}
