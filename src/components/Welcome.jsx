@@ -1,6 +1,6 @@
 // src/components/Welcome.jsx
 import { createSignal, Show, onMount, onCleanup } from "solid-js";
-import ColorPicker from "./ColorPicker";
+import ColorPicker from "./settings/ColorPicker";
 
 const Welcome = ({ onComplete }) => {
   const [step, setStep] = createSignal(0);
@@ -54,6 +54,18 @@ const Welcome = ({ onComplete }) => {
     });
   });
 
+  const handleDeviceSelect = (type) => {
+    setDeviceType(type);
+    if (type === "mobile") {
+      document.body.classList.add('mobile-device');
+      localStorage.setItem('faestro-device-type', 'mobile');
+    } else {
+      document.body.classList.remove('mobile-device');
+      localStorage.setItem('faestro-device-type', 'pc');
+    }
+    setStep(2);
+  };
+
   const steps = [
     {
       title: "Welcome to Faestro!",
@@ -65,10 +77,7 @@ const Welcome = ({ onComplete }) => {
       content: (
         <div class="device-selection">
           <button 
-            onClick={() => {
-              setDeviceType("pc");
-              setStep(2);
-            }}
+            onClick={() => handleDeviceSelect("pc")}
             class="device-button"
           >
             <i class="ri-computer-line"></i>
@@ -77,8 +86,7 @@ const Welcome = ({ onComplete }) => {
           <button 
             onClick={() => {
               if (window.confirm("Warning: interface on mobile devices might be terrible. Continue?")) {
-                setDeviceType("mobile");
-                setStep(2);
+                handleDeviceSelect("mobile");
               }
             }}
             class="device-button"

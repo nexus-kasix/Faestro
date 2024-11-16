@@ -5,5 +5,6 @@ export default defineConfig({
   plugins: [solid()],
   build: {
     target: 'esnext'
-  }
+  },
+  envDir: '.'
 })

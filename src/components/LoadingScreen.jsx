@@ -1,6 +1,6 @@
 // src/components/LoadingScreen.jsx
 import { createSignal, onMount, For } from "solid-js";
-import { RESOURCES } from "../utils/loader";
+import { RESOURCES } from "../services/loader";
 
 const LoadingScreen = () => {
   const [isHidden, setIsHidden] = createSignal(false);

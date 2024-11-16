@@ -1,10 +1,11 @@
 // src/components/Main.jsx
 
 import { createSignal, onMount, Show, For } from "solid-js";
-import { commands } from "/src/commands/console.js";
+import { commands } from "../commands/console.js";
 import Welcome from './Welcome';
-import LoadingScreen from './LoadingScreen';
-import { loadAppResources } from "../utils/loader";
+import LoadingScreen from './LoadingScreen'; 
+import { loadAppResources } from "../services/loader.js";
+import SpeechModal from "./speech_ai/SpeechModal";
 
 function Main() {
   const [logs, setLogs] = createSignal([]);
@@ -12,59 +13,31 @@ function Main() {
   const [isClearing, setIsClearing] = createSignal(false);
   const [isMoreOpen, setIsMoreOpen] = createSignal(false);
   const [showWelcome, setShowWelcome] = createSignal(true);
-  const [deviceType, setDeviceType] = createSignal("");
   const [isLoading, setIsLoading] = createSignal(true);
+  const [searchQuery, setSearchQuery] = createSignal("");
+  const [showSpeechModal, setShowSpeechModal] = createSignal(false);
 
   onMount(async () => {
     await loadAppResources();
     
-    // Проверяем сохраненные настройки
+    const savedAccentColor = localStorage.getItem('faestro-accent-color');
+    if (savedAccentColor) {
+      document.documentElement.style.setProperty('--accent-color', savedAccentColor);
+    }
+
+    const savedBackground = localStorage.getItem('faestro-background');
+    if (savedBackground) {
+      document.body.style.backgroundImage = `url(${savedBackground})`;
+      document.body.style.backgroundSize = 'cover';
+      document.body.style.backgroundPosition = 'center';
+    }
+
     const savedSettings = localStorage.getItem('faestro-settings');
     if (savedSettings) {
-      const settings = JSON.parse(savedSettings);
-
-      if (settings.accentColor) {
-        document.documentElement.style.setProperty('--accent-color', settings.accentColor);
-      }
-
-      if (settings.deviceType) {
-        setDeviceType(settings.deviceType);
-        if (settings.deviceType === "mobile") {
-          document.body.classList.add('mobile-device');
-          const viewport = document.querySelector('meta[name=viewport]');
-          if (viewport) {
-            viewport.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no';
-          }
-        }
-      }
-
-      if (settings.background) {
-        document.body.style.backgroundImage = `url(${settings.background})`;
-      }
-
-      // Пропускаем Welcome окно
       setShowWelcome(false);
     }
     setIsLoading(false);
   });
-
-  const handleWelcomeComplete = (settings) => {
-    try {
-      // Сохраняем основные настройки отдельно от фона
-      const basicSettings = {
-        deviceType: settings.deviceType,
-        accentColor: settings.accentColor
-      };
-      
-      localStorage.setItem('faestro-settings', JSON.stringify(basicSettings));
-      localStorage.setItem('faestro-welcome-completed', 'true');
-      
-      setShowWelcome(false);
-    } catch (error) {
-      console.error('Failed to save settings:', error);
-      alert('Failed to save some settings. The application may not work as expected.');
-    }
-  };
 
   const executeCommand = async (cmd) => {
     const [commandName, ...args] = cmd.split(" ");
@@ -75,14 +48,9 @@ function Main() {
         result = await commands[commandName](...args);
         if (commandName === "faestro.clear") {
           setIsClearing(true);
-          const logElements = document.querySelectorAll('.console-log-entry');
-          logElements.forEach(el => el.classList.add('clearing'));
-          document.getElementById('console-logs').classList.add('clearing');
-          
           setTimeout(() => {
             setLogs([]);
             setIsClearing(false);
-            document.getElementById('console-logs').classList.remove('clearing');
           }, 300);
           return;
         }
@@ -100,13 +68,27 @@ function Main() {
     }
   };
 
+  const filteredCommands = () => {
+    const query = searchQuery().toLowerCase();
+    return Object.keys(commands)
+      .filter(cmd => !query || cmd.toLowerCase().includes(query))
+      .sort();
+  };
+
+  const isSpeechAIEnabled = () => {
+    return localStorage.getItem('faestro-speech-ai-enabled') !== 'false';
+  };
+
   return (
     <>
       <Show when={isLoading()}>
         <LoadingScreen />
       </Show>
       <Show when={showWelcome()}>
-        <Welcome onComplete={handleWelcomeComplete} />
+        <Welcome onComplete={(settings) => {
+          localStorage.setItem('faestro-settings', JSON.stringify(settings));
+          setShowWelcome(false);
+        }} />
       </Show>
       <div class="console-container">
         <div class="console-wrapper">
@@ -124,6 +106,15 @@ function Main() {
               onKeyDown={handleKeyDown}
               placeholder="Enter command..."
             />
+            <Show when={isSpeechAIEnabled()}>
+              <button 
+                id="console-speech" 
+                onClick={() => setShowSpeechModal(true)}
+                aria-label="AI Assistant"
+              >
+                <i class="ri-robot-line"></i>
+              </button>
+            </Show>
             <button 
               id="console-more" 
               onClick={() => setIsMoreOpen(!isMoreOpen())}
@@ -140,22 +131,41 @@ function Main() {
             </button>
           </div>
           {isMoreOpen() && (
-            <div id="more-options" class="context-menu">
-              {Object.keys(commands).map((cmd) => (
-                <button 
-                  class="command-option" 
-                  onClick={() => {
-                    setCommand(cmd);
-                    setIsMoreOpen(false);
-                  }}
-                >
-                  {cmd}
-                </button>
-              ))}
+            <div class="context-menu">
+              <div class="command-search">
+                <i class="ri-search-line"></i>
+                <input
+                  type="text"
+                  placeholder="Search commands..."
+                  value={searchQuery()}
+                  onInput={(e) => setSearchQuery(e.target.value)}
+                  autofocus
+                />
+              </div>
+              <div class="command-list">
+                {filteredCommands().map((cmd) => (
+                  <button 
+                    class="command-option"
+                    onClick={() => {
+                      setCommand(cmd);
+                      setIsMoreOpen(false);
+                      setSearchQuery('');
+                    }}
+                  >
+                    {cmd}
+                  </button>
+                ))}
+              </div>
             </div>
           )}
         </div>
       </div>
+      <Show when={showSpeechModal()}>
+        <SpeechModal 
+          onClose={() => setShowSpeechModal(false)} 
+          onCommand={executeCommand} 
+        />
+      </Show>
     </>
   );
 }
@@ -165,10 +175,7 @@ function ConsoleLogEntry({ text }) {
   const textString = () => (typeof text === 'string' ? text : String(text));
 
   onMount(() => {
-    const totalAnimationTime = textString().split(" ").length * 200 + 500;
-    setTimeout(() => {
-      setIsAnimated(false);
-    }, totalAnimationTime);
+    setTimeout(() => setIsAnimated(false), textString().split(" ").length * 200 + 500);
   });
 
   return (
@@ -177,7 +184,7 @@ function ConsoleLogEntry({ text }) {
         {textString().split(" ").map((word, index) => (
           <span
             class="console-log-char"
-            style={{ "animation-delay": `${index * 0.2}s`, display: "inline-block" }}
+            style={{ "animation-delay": `${index * 0.2}s` }}
           >
             {word}&nbsp;
           </span>
