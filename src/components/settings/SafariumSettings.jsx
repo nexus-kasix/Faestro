@@ -8,6 +8,7 @@ const SafariumSettings = ({ onClose }) => {
   const [activeSubSection, setActiveSubSection] = createSignal(null);
   const [showColorPicker, setShowColorPicker] = createSignal(false);
   const [showWallpaperGallery, setShowWallpaperGallery] = createSignal(false);
+  const [speechAIEnabled, setSpeechAIEnabled] = createSignal(localStorage.getItem('faestro-speech-ai-enabled') === 'true');
 
   const handleColorChange = (color) => {
     if (!color) return;
@@ -193,10 +194,18 @@ const SafariumSettings = ({ onClose }) => {
           icon: 'ri-toggle-line',
           hasToggle: true,
           action: (checked) => {
+            setSpeechAIEnabled(checked);
             localStorage.setItem('faestro-speech-ai-enabled', checked);
-            window.location.reload();
+            const currentSettings = JSON.parse(localStorage.getItem('faestro-settings') || '{}');
+            currentSettings.speechAIEnabled = checked;
+            localStorage.setItem('faestro-settings', JSON.stringify(currentSettings));
+            
+            const speechButton = document.getElementById('console-speech');
+            if (speechButton) {
+              speechButton.style.display = checked ? 'flex' : 'none';
+            }
           },
-          value: () => localStorage.getItem('faestro-speech-ai-enabled') !== 'false'
+          value: () => speechAIEnabled()
         },
         {
           id: 'mistral-api-key',
@@ -235,7 +244,21 @@ const SafariumSettings = ({ onClose }) => {
           isDangerous: true,
           action: () => {
             if (confirm('Are you sure you want to reset all settings? This cannot be undone.')) {
+              // Clear all localStorage items
               localStorage.clear();
+              
+              // Reset accent color to default
+              document.documentElement.style.setProperty('--accent-color', '#6366f1');
+              document.body.style.backgroundImage = 'none';
+              document.body.style.backgroundColor = '#6366f1';
+              
+              // Reset speech AI
+              localStorage.setItem('faestro-speech-ai-enabled', 'false');
+              const speechButton = document.getElementById('console-speech');
+              if (speechButton) {
+                speechButton.style.display = 'none';
+              }
+              
               window.location.reload();
             }
           }
@@ -264,7 +287,7 @@ const SafariumSettings = ({ onClose }) => {
                     parentId: child.id,
                     children: child.children
                   });
-                } else if (child.action) {
+                } else if (!child.hasToggle && child.action) {
                   child.action();
                   if (!child.keepOpen) {
                     setActiveSubSection(null);
@@ -277,8 +300,18 @@ const SafariumSettings = ({ onClose }) => {
               </div>
               <div class="item-content">
                 <div class="item-title">{child.title}</div>
-                {child.value && <div class="item-value">{child.value()}</div>}
+                {child.value && !child.hasToggle && <div class="item-value">{child.value()}</div>}
               </div>
+              {child.hasToggle && (
+                <div 
+                  class={`settings-checkbox ${child.value() ? 'active' : ''}`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    const currentValue = child.value();
+                    child.action(!currentValue);
+                  }}
+                />
+              )}
               {child.hasChildren && <i class="ri-arrow-right-s-line"></i>}
             </div>
           )}
@@ -295,16 +328,6 @@ const SafariumSettings = ({ onClose }) => {
           )}
         </>
       ))}
-      {showWallpaperGallery() && (
-        <WallpaperGallery 
-          onClose={() => setShowWallpaperGallery(false)}
-          onSelect={(wallpaper) => {
-            document.body.style.backgroundImage = `url(${wallpaper})`;
-            localStorage.setItem('faestro-background', wallpaper);
-            setShowWallpaperGallery(false);
-          }}
-        />
-      )}
     </div>
   );
 
@@ -315,7 +338,7 @@ const SafariumSettings = ({ onClose }) => {
           onClose={() => setShowWallpaperGallery(false)}
           onSelect={(wallpaper) => {
             document.body.style.backgroundImage = `url(${wallpaper})`;
-            localStorage.setItem('faestro-background', `url(${wallpaper})`);
+            localStorage.setItem('faestro-background', wallpaper);
             setShowWallpaperGallery(false);
           }}
         />

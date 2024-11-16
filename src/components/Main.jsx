@@ -16,6 +16,7 @@ function Main() {
   const [isLoading, setIsLoading] = createSignal(true);
   const [searchQuery, setSearchQuery] = createSignal("");
   const [showSpeechModal, setShowSpeechModal] = createSignal(false);
+  const [speechAIEnabled, setSpeechAIEnabled] = createSignal(localStorage.getItem('faestro-speech-ai-enabled') === 'true');
 
   onMount(async () => {
     await loadAppResources();
@@ -37,6 +38,10 @@ function Main() {
       setShowWelcome(false);
     }
     setIsLoading(false);
+
+    window.addEventListener('storage', () => {
+      setSpeechAIEnabled(localStorage.getItem('faestro-speech-ai-enabled') === 'true');
+    });
   });
 
   const executeCommand = async (cmd) => {
@@ -75,9 +80,7 @@ function Main() {
       .sort();
   };
 
-  const isSpeechAIEnabled = () => {
-    return localStorage.getItem('faestro-speech-ai-enabled') !== 'false';
-  };
+  const isSpeechAIEnabled = () => speechAIEnabled();
 
   return (
     <>

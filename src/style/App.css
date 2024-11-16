@@ -82,12 +82,9 @@ body {
 }
 
 #console-input {
-  display: grid;
-  grid-template-columns: 1fr auto auto auto;
+  display: flex;
   gap: 10px;
-  -webkit-align-items: center;
-      -ms-flex-align: center;
-          align-items: center;
+  align-items: center;
 }
 
 #console-command {
@@ -1376,13 +1373,11 @@ body {
 .settings-section.danger:hover {
   background: rgba(239, 68, 68, 0.1);
   border-color: rgb(239, 68, 68);
-  transform: translateY(-2px);
 }
 
 /* Adjust grid-template-columns */
 #console-input {
-  display: grid;
-  grid-template-columns: 1fr auto auto auto;
+  display: flex;
   gap: 10px;
   align-items: center;
 }
@@ -1565,7 +1560,7 @@ body {
   box-shadow: 0 0 0 2px rgba(107, 114, 128, 0.1);
 }
 
-/* Стили для темной темы */
+/* Сили для темной темы */
 @media (prefers-color-scheme: dark) {
   .speech-modal select {
     background-color: rgba(255, 255, 255, 0.1);
@@ -2212,3 +2207,44 @@ body {
 }
 
 
+.settings-checkbox {
+  width: 24px;
+  height: 24px;
+  position: relative;
+  cursor: pointer;
+  border: 2px solid var(--accent-color);
+  border-radius: 6px;
+  background-color: white;
+  transition: all 0.2s var(--transition-bezier);
+}
+
+.settings-checkbox::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 6px;
+  height: 12px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: translate(-50%, -60%) rotate(45deg) scale(0);
+  transition: all 0.2s var(--transition-bezier);
+}
+
+.settings-checkbox.active {
+  background-color: var(--accent-color);
+  border-color: var(--accent-color);
+}
+
+.settings-checkbox.active::after {
+  transform: translate(-50%, -60%) rotate(45deg) scale(1);
+}
+
+.settings-checkbox:hover {
+  border-color: var(--accent-dark);
+}
+
+.settings-checkbox.active:hover {
+  background-color: var(--accent-dark);
+  border-color: var(--accent-dark);
+}

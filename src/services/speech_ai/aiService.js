@@ -3,11 +3,11 @@
 export class AIService {
   constructor() {
     this.apiKey = localStorage.getItem('faestro-mistral-api-key');
-    this.enabled = localStorage.getItem('faestro-speech-ai-enabled') !== 'false';
+    this.enabled = localStorage.getItem('faestro-speech-ai-enabled') === 'true';
     
     if (localStorage.getItem('faestro-speech-ai-enabled') === null) {
-      localStorage.setItem('faestro-speech-ai-enabled', 'true');
-      this.enabled = true;
+      localStorage.setItem('faestro-speech-ai-enabled', 'false');
+      this.enabled = false;
     }
 
     // Базовый контекст системы

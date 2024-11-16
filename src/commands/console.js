@@ -34,6 +34,12 @@ Version: Faestro version ${import.meta.env.VITE_FAESTRO_VERSION}
     localStorage.removeItem('faestro-background');
     document.body.style.backgroundImage = 'none';
     window.location.reload();
+    // Reset speech AI
+    localStorage.setItem('faestro-speech-ai-enabled', 'false');
+    const speechButton = document.getElementById('console-speech');
+    if (speechButton) {
+      speechButton.style.display = 'none';
+    }
     return "Settings reset. Reloading application...";
   },
   ...safariumCommands
