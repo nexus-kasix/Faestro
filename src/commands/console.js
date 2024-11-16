@@ -42,5 +42,9 @@ Version: Faestro version ${import.meta.env.VITE_FAESTRO_VERSION}
     }
     return "Settings reset. Reloading application...";
   },
+  'faestro.clock': () => {
+    const now = new Date();
+    return `Current time is ${now.toLocaleTimeString()}`;
+  },
   ...safariumCommands
 };
