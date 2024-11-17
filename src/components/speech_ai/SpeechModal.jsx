@@ -118,7 +118,7 @@ const SpeechModal = ({ onClose, onCommand }) => {
       if (isListening()) {
         stopListening();
       } else {
-        setShowLangSelect(true); // Показываем выбор языка перед началом записи
+        setShowLangSelect(true); // Показываем выбор языка перед началом з��писи
       }
     }
   };
@@ -216,6 +216,15 @@ const SpeechModal = ({ onClose, onCommand }) => {
           <i class="ri-add-line"></i>
           New Chat
         </button>
+        <a 
+          href="https://o6c3udfvdn1.typeform.com/to/vaOM1E4w" 
+          target="_blank" 
+          class="faestro-report-btn"
+          title="Report an Issue"
+        >
+          <i class="ri-flag-line"></i>
+          Report
+        </a>
       </div>
 
       <Show when={showHistory()}>
