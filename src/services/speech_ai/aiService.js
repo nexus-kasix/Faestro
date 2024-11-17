@@ -68,7 +68,7 @@ When helping users:
           'Authorization': `Bearer ${this.apiKey}`
         },
         body: JSON.stringify({
-          model: "mistral-tiny",
+          model: "mistral-large-latest",
           messages: [
             {
               role: "system",

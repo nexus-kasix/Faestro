@@ -46,5 +46,5 @@ Version: Faestro version ${import.meta.env.VITE_FAESTRO_VERSION}
     const now = new Date();
     return `Current time is ${now.toLocaleTimeString()}`;
   },
-  ...safariumCommands
+  ...safariumCommands,
 };

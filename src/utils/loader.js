@@ -7,7 +7,7 @@ export const RESOURCES = {
   THEMES: 'Color Themes',
   BACKGROUNDS: 'Wallpapers',
   WELCOME: 'Setup Assistant',
-  ICON: 'Application Icon'
+  ICON: 'Application Icon',
 };
 
 // В loader.js
